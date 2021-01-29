@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "mysticism:blocks/force_ore_block_water"
+  }
+}
