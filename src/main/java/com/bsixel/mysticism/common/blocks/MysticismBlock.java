@@ -9,6 +9,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
@@ -31,4 +32,8 @@ public abstract class MysticismBlock extends Block {
         super(properties);
     }
 
+    @Override
+    public void dropXpOnBlockBreak(ServerWorld worldIn, BlockPos pos, int amount) {
+        super.dropXpOnBlockBreak(worldIn, pos, amount);
+    }
 }

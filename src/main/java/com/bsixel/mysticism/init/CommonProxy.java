@@ -5,12 +5,14 @@ import com.bsixel.mysticism.common.capability.mana.ManaCapability;
 import com.bsixel.mysticism.common.commands.CommandRegistrar;
 import com.bsixel.mysticism.common.events.PlayerEventHandler;
 import com.bsixel.mysticism.common.networking.NetworkManager;
+import com.bsixel.mysticism.common.world.OreGen;
 import com.bsixel.mysticism.init.registries.BlockRegistry;
 import com.bsixel.mysticism.init.registries.ItemRegistry;
 import com.bsixel.mysticism.init.registries.TileEntityRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
@@ -54,8 +56,9 @@ public class CommonProxy { // TODO: Maybe break out into separate initializers f
     }
 
     private void attachNormalEventBus(IEventBus eventBus) {
-        // onEntityDeath watchers etc - apparently commands also go here? Seems odd
+        // Normal watchers etc - World gen, commands, in game events, basically anything that isn't related to server startup or shutdown.
         eventBus.addListener(this::registerCommands);
+        eventBus.addListener(EventPriority.HIGH, OreGen::generateOres);
         eventBus.addListener(PlayerEventHandler::onPlayerJoin);
         eventBus.addListener(PlayerEventHandler::onPlayerTick);
     }

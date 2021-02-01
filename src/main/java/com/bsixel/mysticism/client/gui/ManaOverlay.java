@@ -4,9 +4,6 @@ import com.bsixel.mysticism.common.capability.mana.ManaCapability;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.AbstractGui;
-
-import java.awt.*;
 
 public class ManaOverlay extends AbstractMystGui {
 
@@ -19,12 +16,7 @@ public class ManaOverlay extends AbstractMystGui {
 
             double fillLength = totalLength * (manaStats.getCurrentMana() / manaStats.getMaxMana());
 
-            this.renderOutlinedGradient(pane, leftPad, (int)fillLength, topPad, barThickness, totalLength, 3, "6f99e3", "1660e0", "bd3324");
-
-            /*for(int i = 100; i <= manaStats.getMaxMana(); i+=100){
-                double marker = (100) * ((i) / manaStats.getMaxMana())  + barStartLeft;
-                fill(pane,(int)marker, barStartTop, (int)marker+1, barBottom, parseAlpha("c2293b"));
-            }*/
+            this.renderOutlinedGradient(pane, leftPad, (int)fillLength, topPad, barThickness, totalLength, 3, "6acdd4", "44bdc7", "435354");
 
         });
     }

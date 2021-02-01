@@ -14,6 +14,6 @@ public class MysticismItemGroup extends ItemGroup {
 
     @Override
     public ItemStack createIcon() {
-        return new ItemStack(ItemRegistry.WATER_ORB_ITEM.get());
+        return new ItemStack(ItemRegistry.WATER_ORB_ITEM.get()); // TODO: We should use one of the Balance items or something instead
     }
 }

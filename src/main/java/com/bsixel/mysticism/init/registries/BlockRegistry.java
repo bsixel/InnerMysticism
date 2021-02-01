@@ -1,7 +1,8 @@
 package com.bsixel.mysticism.init.registries;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.common.blocks.standard.ForceShardOreBlock;
+import com.bsixel.mysticism.common.blocks.standard.AltarBlock;
+import com.bsixel.mysticism.common.blocks.standard.ores.*;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -41,7 +42,13 @@ public class BlockRegistry {
             .sound(SoundType.STONE)
             .hardnessAndResistance(1.0f);
 
-//    public static final RegistryObject<AltarBlock> ALTARBLOCK = BLOCKS.register("altar_block", AltarBlock::new);
-    public static final RegistryObject<ForceShardOreBlock> FORCE_ORE_BLOCK = BLOCKS.register("force_ore_block", ForceShardOreBlock::new);
+    public static final RegistryObject<AltarBlock> ALTAR_BLOCK = BLOCKS.register("altar_block", AltarBlock::new);
+    public static final RegistryObject<ForceOreBlock> WATER_FORCE_ORE_BLOCK = BLOCKS.register("water_force_ore_block", WaterForceOreBlock::new);
+    public static final RegistryObject<ForceOreBlock> FIRE_FORCE_ORE_BLOCK = BLOCKS.register("fire_force_ore_block", FireForceOreBlock::new);
+    public static final RegistryObject<ForceOreBlock> AIR_FORCE_ORE_BLOCK = BLOCKS.register("air_force_ore_block", AirForceOreBlock::new);
+    public static final RegistryObject<ForceOreBlock> EARTH_FORCE_ORE_BLOCK = BLOCKS.register("earth_force_ore_block", EarthForceOreBlock::new);
+    public static final RegistryObject<ForceOreBlock> LIFE_FORCE_ORE_BLOCK = BLOCKS.register("life_force_ore_block", LifeForceOreBlock::new);
+    public static final RegistryObject<ForceOreBlock> DEATH_FORCE_ORE_BLOCK = BLOCKS.register("death_force_ore_block", DeathForceOreBlock::new);
+    public static final RegistryObject<ForceOreBlock> BALANCE_FORCE_ORE_BLOCK = BLOCKS.register("balance_force_ore_block", BalanceForceOreBlock::new);
 
 }

@@ -1,5 +1,24 @@
 {
-  "message.mysticism.altar.description": "An altar to guide you in exploring the mystical arts",
+  "itemGroup.mysticism": "Mysticism",
+  "block.mysticism.altar_block": "Altar",
+  "tooltip.mysticism.altar.description": "An altar to guide you in exploring the mystical arts",
   "item.mysticism.water_orb": "Water Orb",
-  "block.mysticism.force_ore_block": "Force Ore"
+  "tooltip.mysticism.force_orb_description": "A mystical orb bound to the Force of %s",
+  "tooltip.mysticism.force_ore_block_description": "A crystalline ore containing shards of the Force of %s, bound to the earth by some ancient process.",
+  "block.mysticism.water_force_ore_block": "Water Force Ore",
+  "item.mysticism.water_crystal": "Water Crystal",
+  "block.mysticism.fire_force_ore_block": "Fire Force Ore",
+  "item.mysticism.fire_crystal": "Fire Crystal",
+  "block.mysticism.air_force_ore_block": "Air Force Ore",
+  "item.mysticism.air_crystal": "Air Crystal",
+  "block.mysticism.earth_force_ore_block": "Earth Force Ore",
+  "item.mysticism.earth_crystal": "Earth Crystal",
+  "block.mysticism.life_force_ore_block": "Life Force Ore",
+  "item.mysticism.life_crystal": "Life Crystal",
+  "block.mysticism.death_force_ore_block": "Death Force Ore",
+  "item.mysticism.death_crystal": "Death Crystal",
+  "block.mysticism.balance_force_ore_block": "Balance Force Ore",
+  "item.mysticism.balance_crystal": "Balance Crystal",
+  "tooltip.mysticism.force_crystal_tooltip": "A small shard of the Force of %s",
+  "tooltip.mysticism.shift_for_more": "Hold \u00A7eShift \u00A77\u00A7ffor more information"
 }
