@@ -23,23 +23,19 @@ import java.util.stream.Stream;
 public class AltarBlock extends BaseHorizontalRotatableBlock {
 
     private static final VoxelShape HITBOX = Stream.of(
-            Block.makeCuboidShape(7, 2, 6, 11, 6, 10),
-            Block.makeCuboidShape(5, 4, 4, 11, 5, 12),
-            Block.makeCuboidShape(5, 0, 4, 7, 2, 6),
-            Block.makeCuboidShape(11, 0, 10, 13, 2, 12),
-            Block.makeCuboidShape(11, 0, 4, 13, 2, 6),
-            Block.makeCuboidShape(5, 0, 10, 7, 2, 12),
-            Block.makeCuboidShape(10, 3, 9, 12, 5, 11),
-            Block.makeCuboidShape(6, 3, 9, 8, 5, 11),
-            Block.makeCuboidShape(6, 3, 5, 8, 5, 7),
-            Block.makeCuboidShape(10, 3, 5, 12, 5, 7),
-            Block.makeCuboidShape(2, 6, 7, 4, 12, 9),
-            Block.makeCuboidShape(2, 6, 0, 3, 16, 1),
-            Block.makeCuboidShape(0, 6, 4, 1, 16, 5),
-            Block.makeCuboidShape(0, 6, 11, 1, 16, 12),
-            Block.makeCuboidShape(2, 6, 15, 3, 16, 16),
-            Block.makeCuboidShape(9, 6, 14, 10, 16, 15),
-            Block.makeCuboidShape(9, 6, 1, 10, 16, 2)
+            Block.makeCuboidShape(5, 3, 4, 11, 8, 10),
+            Block.makeCuboidShape(4, 11, 0, 12, 13, 9),
+            Block.makeCuboidShape(10, 0, 3, 12, 4, 5),
+            Block.makeCuboidShape(4, 0, 3, 6, 4, 5),
+            Block.makeCuboidShape(4, 0, 9, 6, 4, 11),
+            Block.makeCuboidShape(10, 0, 9, 12, 4, 11),
+            Block.makeCuboidShape(2, 8, 4, 3, 15, 5),
+            Block.makeCuboidShape(13, 8, 4, 14, 15, 5),
+            Block.makeCuboidShape(14, 8, 8, 15, 15, 9),
+            Block.makeCuboidShape(12, 8, 12, 13, 15, 13),
+            Block.makeCuboidShape(7, 8, 12, 9, 15, 14),
+            Block.makeCuboidShape(1, 8, 8, 2, 15, 9),
+            Block.makeCuboidShape(3, 8, 12, 4, 15, 13)
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
 
     public AltarBlock() {

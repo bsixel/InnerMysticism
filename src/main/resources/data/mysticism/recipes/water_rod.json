@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  #",
+    " # ",
+    "#  "
+  ],
+  "key": {
+    "#": {
+      "item": "mysticism:water_crystal"
+    }
+  },
+  "result": {
+    "item": "mysticism:water_rod",
+    "count": 1
+  }
+}

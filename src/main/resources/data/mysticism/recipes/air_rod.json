@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  #",
+    " # ",
+    "#  "
+  ],
+  "key": {
+    "#": {
+      "item": "mysticism:air_crystal"
+    }
+  },
+  "result": {
+    "item": "mysticism:air_rod",
+    "count": 1
+  }
+}

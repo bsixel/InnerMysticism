@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  #",
+    " # ",
+    "#  "
+  ],
+  "key": {
+    "#": {
+      "item": "mysticism:earth_crystal"
+    }
+  },
+  "result": {
+    "item": "mysticism:earth_rod",
+    "count": 1
+  }
+}

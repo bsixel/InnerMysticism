@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  #",
+    " # ",
+    "#  "
+  ],
+  "key": {
+    "#": {
+      "item": "mysticism:balance_crystal"
+    }
+  },
+  "result": {
+    "item": "mysticism:balance_rod",
+    "count": 1
+  }
+}

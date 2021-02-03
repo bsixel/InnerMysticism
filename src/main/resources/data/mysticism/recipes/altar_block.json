@@ -1,0 +1,41 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#MX",
+        "ALT",
+        "JCB"
+    ],
+    "key": {
+        "#": {
+            "item": "mysticism:death_rod"
+        },
+        "M": {
+            "item": "mysticism:balance_rod"
+        },
+        "X": {
+            "item": "mysticism:life_rod"
+        },
+        "A": {
+            "item": "mysticism:fire_rod"
+        },
+        "L": {
+            "item": "minecraft:lectern"
+        },
+        "T": {
+            "item": "mysticism:water_rod"
+        },
+        "J": {
+            "item": "mysticism:air_rod"
+        },
+        "C": {
+            "item": "minecraft:coal_block"
+        },
+        "B": {
+            "item": "mysticism:earth_rod"
+        }
+    },
+    "result": {
+        "item": "mysticism:altar_block",
+        "count": 1
+    }
+}

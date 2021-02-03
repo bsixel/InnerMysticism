@@ -3,7 +3,6 @@ package com.bsixel.mysticism;
 import com.bsixel.mysticism.init.ClientProxy;
 import com.bsixel.mysticism.init.CommonProxy;
 import com.bsixel.mysticism.init.MysticismItemGroup;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -11,6 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib3.GeckoLib;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MysticismMod.MOD_ID)
@@ -26,7 +26,7 @@ public class MysticismMod {
     private final CommonProxy sideSafeProxy;
 
     public MysticismMod() {
-
+        GeckoLib.initialize(); // TODO: If GeckoLib ever isn't updated in time, make sure to get rid of this
         // Make sure we always distinguish between sided-safe initialization. Ex: Don't register GUIs on server, but register capabilities on both sides
         this.sideSafeProxy = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 

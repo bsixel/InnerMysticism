@@ -94,6 +94,7 @@ repositories {
     maven { url 'https://maven.blamejared.com' } // Patchouli, psi, quark, botania, crafttweaker, IE, ... many things!
     maven { url "https://dvs1.progwml6.com/files/maven" } // JEI, tinkers, knightstuff
     maven { url "http://maven.tterrag.com/" } // The One Probe, enderio, others
+    maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' } // Obviously GeckoLib. For animations
 }
 
 dependencies {
@@ -114,6 +115,9 @@ dependencies {
     compile fg.deobf(project.dependencies.create("mcjty.theoneprobe:TheOneProbe-${top_version}") {
         transitive = false
     })
+
+    // Gecko Lib for animations
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.8')
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

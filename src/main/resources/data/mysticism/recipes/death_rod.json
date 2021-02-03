@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  #",
+    " # ",
+    "#  "
+  ],
+  "key": {
+    "#": {
+      "item": "mysticism:death_crystal"
+    }
+  },
+  "result": {
+    "item": "mysticism:death_rod",
+    "count": 1
+  }
+}

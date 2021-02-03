@@ -35,6 +35,13 @@ public class ItemRegistry {
     public static final RegistryObject<Item> LIFE_CRYSTAL_ITEM = ITEMS.register("life_crystal", LifeCrystal::new);
     public static final RegistryObject<Item> DEATH_CRYSTAL_ITEM = ITEMS.register("death_crystal", DeathCrystal::new);
     public static final RegistryObject<Item> BALANCE_CRYSTAL_ITEM = ITEMS.register("balance_crystal", BalanceCrystal::new);
+    public static final RegistryObject<Item> WATER_ROD_ITEM = ITEMS.register("water_rod", () -> new Item(getDefaultProperties()));
+    public static final RegistryObject<Item> FIRE_ROD_ITEM = ITEMS.register("fire_rod", () -> new Item(getDefaultProperties()));
+    public static final RegistryObject<Item> AIR_ROD_ITEM = ITEMS.register("air_rod", () -> new Item(getDefaultProperties()));
+    public static final RegistryObject<Item> EARTH_ROD_ITEM = ITEMS.register("earth_rod", () -> new Item(getDefaultProperties()));
+    public static final RegistryObject<Item> LIFE_ROD_ITEM = ITEMS.register("life_rod", () -> new Item(getDefaultProperties()));
+    public static final RegistryObject<Item> DEATH_ROD_ITEM = ITEMS.register("death_rod", () -> new Item(getDefaultProperties()));
+    public static final RegistryObject<Item> BALANCE_ROD_ITEM = ITEMS.register("balance_rod", () -> new Item(getDefaultProperties()));
 
     // BLOCK ITEMS
     public static final RegistryObject<BlockItem> WATER_FORCE_ORE_BLOCK = ITEMS.register("water_force_ore_block", () -> new BlockItem(BlockRegistry.WATER_FORCE_ORE_BLOCK.get(), new Item.Properties().group(MysticismMod.item_group)));

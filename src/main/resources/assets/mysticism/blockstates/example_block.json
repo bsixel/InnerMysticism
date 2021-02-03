@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "mysticism:block/altar_block" },
+    "facing=east":  { "model": "mysticism:block/altar_block", "y": 90 },
+    "facing=south": { "model": "mysticism:block/altar_block", "y": 180 },
+    "facing=west":  { "model": "mysticism:block/altar_block", "y": 270 }
+  }
+}
