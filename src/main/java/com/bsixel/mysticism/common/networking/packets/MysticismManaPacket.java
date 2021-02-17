@@ -26,9 +26,9 @@ public class MysticismManaPacket { // TODO: Buffer xp updates. XP: They break 20
 
     public MysticismManaPacket(PacketBuffer buffer) {
         this.mystLevel = buffer.readInt();
-        this.mystXp = buffer.readFloat();
-        this.maxMana = buffer.readFloat();
-        this.currentMana = buffer.readFloat();
+        this.mystXp = buffer.readDouble();
+        this.maxMana = buffer.readDouble();
+        this.currentMana = buffer.readDouble();
         this.primaryForce = buffer.readEnumValue(Force.class);
         CompoundNBT attTag = buffer.readCompoundTag();
         if (attTag != null) { // If it's null, don't set attenuation, we won't update it later

@@ -6,6 +6,7 @@ import net.minecraft.util.math.vector.Vector3d;
 
 public abstract class SpellInstanceBase implements ISpellInstance {
 
+    // TODO: Maybe add initial cast world?
     protected int casterId;
     protected BlockPos initialCastPos;
     protected Vector3d initialCastDirection;

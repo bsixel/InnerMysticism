@@ -16,7 +16,7 @@ public interface ISpellComponent {
     String getDescription();
     double getAttenuationToForce(Force force);
     double getCost();
-    double getSustainedCost();
+    double getSustainedCost(); // TODO: This should maybe be a mult
     boolean isChildAllowed(Class<? extends ISpellComponent> childPart);
     void addAllowedChild(Class<? extends ISpellComponent> childPart);
 

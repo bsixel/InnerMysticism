@@ -7,7 +7,7 @@ import net.minecraft.util.math.vector.Vector3d;
 
 public interface ISpellCastType extends ISpellComponent { // Self, sustained (children: beam, chain, self sus), projectile, touch, rune etc. TODO: Will need subclasses
 
-    void cast(LivingEntity caster);
-    void cast(BlockPos sourcePos, Vector3d lookVector);
+    boolean cast(LivingEntity caster);
+    boolean cast(BlockPos sourcePos, Vector3d lookVector);
 
 }

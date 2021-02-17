@@ -1,8 +1,11 @@
 package com.bsixel.mysticism.common.api.spells.casttypes;
 
 import com.bsixel.mysticism.common.api.capability.mana.Force;
+import com.bsixel.mysticism.common.api.spells.ISpellComponent;
+import com.bsixel.mysticism.common.api.spells.Spell;
 import com.bsixel.mysticism.common.api.spells.actions.ISpellAction;
 import com.bsixel.mysticism.common.api.spells.BaseSpellComponent;
+import com.bsixel.mysticism.common.api.spells.instances.SpellInstanceTouch;
 import javafx.scene.paint.Color;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
@@ -11,7 +14,16 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 
+import javax.annotation.Nullable;
+
 public class SpellCastTypeTouch extends BaseSpellComponent implements ISpellCastType {
+
+    public SpellCastTypeTouch() {}
+
+    public SpellCastTypeTouch(Spell parentSpell, @Nullable ISpellComponent parentComponent) {
+        this.parentSpell = parentSpell;
+        this.parentComponent = parentComponent;
+    }
 
     @Override
     public boolean isActive() {
@@ -19,24 +31,26 @@ public class SpellCastTypeTouch extends BaseSpellComponent implements ISpellCast
     }
 
     @Override
-    public void cast(LivingEntity caster) { // TODO: We'll need to do something different here if they're going AOE touch
+    public boolean cast(LivingEntity caster) { // TODO: We'll need to do something different here if they're going AOE touch
         RayTraceResult traceResult = caster.pick(this.calculateRange(caster), 0, this.canTouchFluids());
-        this.children.forEach(child -> {
+        return this.children.stream().allMatch(child -> {
             if (child instanceof ISpellAction) {
                 if (traceResult.getType() == RayTraceResult.Type.BLOCK) {
-                    BlockRayTraceResult correctedResult = (BlockRayTraceResult) traceResult;
-                    ((ISpellAction) child).applyToBlock(caster.getEntityWorld(), correctedResult, null);
+                    BlockRayTraceResult correctedResult = (BlockRayTraceResult) traceResult; // I think this is actually safe?
+                    return ((ISpellAction) child).applyToBlock(caster.getEntityWorld(), correctedResult, new SpellInstanceTouch(caster.getEntityId(), caster.getPosition(), caster.getLookVec(), parentSpell));
                 } else if (traceResult.getType() == RayTraceResult.Type.ENTITY) {
                     EntityRayTraceResult correctedResult = (EntityRayTraceResult) traceResult;
-                    ((ISpellAction) child).applyToEntity(caster.getEntityWorld(), correctedResult, null);
+                    return ((ISpellAction) child).applyToEntity(caster.getEntityWorld(), correctedResult, new SpellInstanceTouch(caster.getEntityId(), caster.getPosition(), caster.getLookVec(), parentSpell));
                 }
             }
+            return false;
         });
     }
 
     @Override
-    public void cast(BlockPos sourcePos, Vector3d lookVector) {
+    public boolean cast(BlockPos sourcePos, Vector3d lookVector) {
         // Hold for now
+        return false;
     }
 
     @Override

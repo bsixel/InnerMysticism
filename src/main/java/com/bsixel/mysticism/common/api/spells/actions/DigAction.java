@@ -19,6 +19,7 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -37,9 +38,10 @@ public class DigAction extends BaseSpellComponent implements ISpellAction { // T
             BlockState initialTargetState = world.getBlockState(trace.getPos()); // Ignore this warning, block trace result should always be non null
             Block hitBlock = initialTargetState.getBlock();
             TileEntity tile = world.getTileEntity(trace.getPos()); // This may very well be null, but it shouldn't matter
-            int miningLevel = 2; // By default start at 2; Meaning you can break iron ore; Maybe downgrade to 1 so you can't skip stone age
+            int miningLevel = 1; // By default start at 1; Meaning you can break iron ore; Effectively a stone pickaxe, any lower is nearly useless, but maybe downgrade to avoid skipping stone age
             miningLevel = (int) (miningLevel + children.stream().filter(child -> child instanceof SpellEnhancementPower).count());
             ItemStack mockBreakerStack = ItemHelper.getToolOrMock(caster, initialTargetState, miningLevel);
+            miningLevel = Math.max(miningLevel, mockBreakerStack.getHarvestLevel(ToolType.PICKAXE, null, null));
 
             // TODO: Maybe we register with an enhancement what it should do for our class???
             // TODO: Apply enhancements to item to apply enchantments or whatever. Also figure out how to autosmelt
@@ -49,7 +51,7 @@ public class DigAction extends BaseSpellComponent implements ISpellAction { // T
                 }
             }
 
-            if (miningLevel > initialTargetState.getHarvestLevel() && SpellHelper.canEntityBreakPos(world, caster, trace.getPos())) { // If we're clientside or the block is... safetied by forge or spawn or something, we won't break it
+            if (miningLevel >= initialTargetState.getHarvestLevel() && SpellHelper.canEntityBreakPos(world, caster, trace.getPos())) { // If we're clientside or the block is... safetied by forge or spawn or something, we won't break it
                 // If we have silk touch or fortune, it'll be handled on their end - altering/returning a different itemstack. Maybe? Ugh I have no idea how drops work in this version
                 List<ItemStack> initialDrops = Block.getDrops(initialTargetState, (ServerWorld) world, trace.getPos(), tile, caster, mockBreakerStack);
                 initialDrops.forEach(itemStack -> {
