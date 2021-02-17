@@ -1,7 +1,7 @@
-package com.bsixel.mysticism.common.capability.mana;
+package com.bsixel.mysticism.common.api.capability.mana;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.common.capability.SerializableCapabilityProvider;
+import com.bsixel.mysticism.common.api.capability.SerializableCapabilityProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -43,14 +43,14 @@ public class ManaCapability {
         public INBT writeNBT(Capability<IManaHolder> capability, IManaHolder instance, Direction side) {
             CompoundNBT nbt = new CompoundNBT();
             nbt.putInt("mystLevel", instance.getMysticismLevel());
-            nbt.putFloat("mystXp", instance.getMysticismXp());
-            nbt.putFloat("maxMana", instance.getMaxMana());
-            nbt.putFloat("mana", instance.getCurrentMana());
+            nbt.putDouble("mystXp", instance.getMysticismXp());
+            nbt.putDouble("maxMana", instance.getMaxMana());
+            nbt.putDouble("mana", instance.getCurrentMana());
             nbt.putString("primaryForce", instance.getPrimaryForce().name());
             // Serialize attenuations
             CompoundNBT attenuationNbt = new CompoundNBT();
             for (Force force : instance.getAttenuations().keySet()) {
-                attenuationNbt.putFloat(force.name(), instance.getForceAttenuation(force)); // name(), not getName() ! Very important
+                attenuationNbt.putDouble(force.name(), instance.getForceAttenuation(force)); // name(), not getName() ! Very important
             }
             nbt.put(attKey, attenuationNbt);
             return nbt;
@@ -61,9 +61,9 @@ public class ManaCapability {
             if (nbt instanceof CompoundNBT) {
                 CompoundNBT read = (CompoundNBT) nbt;
                 instance.setMysticismLevel(read.getInt("mystLevel"));
-                instance.setMysticismXp(read.getFloat("mystXp"));
-                instance.setMaxMana(read.getFloat("maxMana")); // Max first in case implementation specifically caps
-                instance.setMana(read.getFloat("mana"));
+                instance.setMysticismXp(read.getDouble("mystXp"));
+                instance.setMaxMana(read.getDouble("maxMana")); // Max first in case implementation specifically caps
+                instance.setMana(read.getDouble("mana"));
                 Force primaryForce;
                 primaryForce = tryForceFromName(read.getString("primaryForce"));
                 instance.setPrimaryForce(primaryForce != null ? primaryForce : Force.BALANCE);
@@ -72,7 +72,7 @@ public class ManaCapability {
                 if (read.get(attKey) instanceof CompoundNBT) {
                     CompoundNBT attNbt = (CompoundNBT) read.get(attKey);
                     for (String forceName : attNbt.keySet()) {
-                        instance.setForceAttenuation(tryForceFromName(forceName), attNbt.getFloat(forceName));
+                        instance.setForceAttenuation(tryForceFromName(forceName), attNbt.getDouble(forceName));
                     }
                 }
                 // TODO: Do we need refillable here? I don't think so

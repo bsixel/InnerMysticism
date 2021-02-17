@@ -1,7 +1,9 @@
 package com.bsixel.mysticism.init;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.common.capability.mana.ManaCapability;
+import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
+import com.bsixel.mysticism.common.api.spells.SpellHelper;
+import com.bsixel.mysticism.common.api.spells.casttypes.SpellCastTypeTouch;
 import com.bsixel.mysticism.common.commands.CommandRegistrar;
 import com.bsixel.mysticism.common.events.PlayerEventHandler;
 import com.bsixel.mysticism.common.networking.NetworkManager;
@@ -47,7 +49,7 @@ public class CommonProxy { // TODO: Maybe break out into separate initializers f
         // TODO: Move what's left to their own
         CONTAINERS.register(lifecycleBus);
         ENTITIES.register(lifecycleBus);
-
+        selfRegisterSpellComponents();
     }
 
     private void attachStartupLifecycleBus(IEventBus lifecycleBus) {
@@ -61,6 +63,10 @@ public class CommonProxy { // TODO: Maybe break out into separate initializers f
         eventBus.addListener(EventPriority.HIGH, OreGen::generateOres);
         eventBus.addListener(PlayerEventHandler::onPlayerJoin);
         eventBus.addListener(PlayerEventHandler::onPlayerTick);
+    }
+
+    private void selfRegisterSpellComponents() {
+        SpellHelper.registerSpellComponent(new SpellCastTypeTouch()); // Or whatever TODO: Actually register any new ones we make here
     }
 
     private void registerCommonSetup(FMLCommonSetupEvent event) {

@@ -1,7 +1,6 @@
-package com.bsixel.mysticism.common.capability.mana;
+package com.bsixel.mysticism.common.api.capability.mana;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,11 +9,11 @@ public class DefaultManaHolder implements IManaHolder {
 
     private final LivingEntity attachedEntity;
     private int mysticismLevel = 0;
-    private float mysticismXp = 0;
-    private float maxMana = 1000;
-    private float currentMana = 0;
+    private double mysticismXp = 0;
+    private double maxMana = 1000;
+    private double currentMana = 0;
     private Force force = Force.BALANCE; // By default, the world is bound to balance
-    private Map<Force, Float> attenuation = new HashMap<>();
+    private Map<Force, Double> attenuation = new HashMap<>();
 
     public DefaultManaHolder(LivingEntity entity) {
         this.attachedEntity = entity;
@@ -36,27 +35,27 @@ public class DefaultManaHolder implements IManaHolder {
     }
 
     @Override
-    public float getMysticismXp() {
+    public double getMysticismXp() {
         return this.mysticismXp;
     }
 
     @Override
-    public void setMysticismXp(float xp) {
+    public void setMysticismXp(double xp) {
         this.mysticismXp = xp;
     }
 
     @Override
-    public float getMaxMana() {
+    public double getMaxMana() {
         return this.maxMana;
     }
 
     @Override
-    public void setMaxMana(float amt) {
+    public void setMaxMana(double amt) {
         this.maxMana = amt;
     }
 
     @Override
-    public float addMaxMana(float amt) {
+    public double addMaxMana(double amt) {
         this.maxMana += amt;
         return this.maxMana;
     }
@@ -70,7 +69,7 @@ public class DefaultManaHolder implements IManaHolder {
     }
 
     @Override
-    public float getCurrentMana() {
+    public double getCurrentMana() {
         this.fixCurrentMana();
         return this.currentMana;
     }
@@ -81,12 +80,12 @@ public class DefaultManaHolder implements IManaHolder {
     }
 
     @Override
-    public void setMana(float amt) {
+    public void setMana(double amt) {
         this.currentMana = amt;
         this.fixCurrentMana();
     }
 
-    public float addMana(float amount) { // TODO: I guess this also works to remove mana, maybe rename?
+    public double addMana(double amount) { // TODO: I guess this also works to remove mana, maybe rename?
         this.currentMana += amount;
         return this.getCurrentMana();
     }
@@ -110,17 +109,17 @@ public class DefaultManaHolder implements IManaHolder {
     }
 
     @Override
-    public Map<Force, Float> getAttenuations() {
+    public Map<Force, Double> getAttenuations() {
         return this.attenuation;
     }
 
     @Override
-    public void setForceAttenuation(Force force, float amount) {
+    public void setForceAttenuation(Force force, double amount) {
         this.attenuation.put(force, amount);
     }
 
     @Override
-    public float getForceAttenuation(Force force) {
-        return this.attenuation.getOrDefault(force, 0f); // By default things have no attenuation to any particular force
+    public double getForceAttenuation(Force force) {
+        return this.attenuation.getOrDefault(force, 0D); // By default things have no attenuation to any particular force
     }
 }

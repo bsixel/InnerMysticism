@@ -1,10 +1,8 @@
 package com.bsixel.mysticism.client.gui;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.common.capability.mana.ManaCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

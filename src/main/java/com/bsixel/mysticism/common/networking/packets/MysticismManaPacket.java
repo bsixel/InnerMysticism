@@ -1,8 +1,8 @@
 package com.bsixel.mysticism.common.networking.packets;
 
-import com.bsixel.mysticism.common.capability.mana.Force;
-import com.bsixel.mysticism.common.capability.mana.IManaHolder;
-import com.bsixel.mysticism.common.capability.mana.ManaCapability;
+import com.bsixel.mysticism.common.api.capability.mana.Force;
+import com.bsixel.mysticism.common.api.capability.mana.IManaHolder;
+import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -18,11 +18,11 @@ import java.util.function.Supplier;
 public class MysticismManaPacket { // TODO: Buffer xp updates. XP: They break 20 blocks in a second, instead of sending 20 packets, send one with the combo of all 20 summed.
 
     private int mystLevel;
-    private float mystXp;
-    private float maxMana;
-    private float currentMana;
+    private double mystXp;
+    private double maxMana;
+    private double currentMana;
     private Force primaryForce;
-    private Map<Force, Float> attenuation = new HashMap<>();
+    private Map<Force, Double> attenuation = new HashMap<>();
 
     public MysticismManaPacket(PacketBuffer buffer) {
         this.mystLevel = buffer.readInt();
@@ -33,7 +33,7 @@ public class MysticismManaPacket { // TODO: Buffer xp updates. XP: They break 20
         CompoundNBT attTag = buffer.readCompoundTag();
         if (attTag != null) { // If it's null, don't set attenuation, we won't update it later
             for (String forceName : attTag.keySet()) {
-                this.attenuation.put(Force.valueOf(forceName), attTag.getFloat(forceName));
+                this.attenuation.put(Force.valueOf(forceName), attTag.getDouble(forceName));
             }
         }
     }
@@ -47,7 +47,7 @@ public class MysticismManaPacket { // TODO: Buffer xp updates. XP: They break 20
         this.attenuation = manaData.getAttenuations();
     }
 
-    public MysticismManaPacket(int mystLevel, float mystXp, float maxMana, float currentMana, Force primaryForce, Map<Force, Float> attenuation) {
+    public MysticismManaPacket(int mystLevel, double mystXp, double maxMana, double currentMana, Force primaryForce, Map<Force, Double> attenuation) {
         this.mystLevel = mystLevel;
         this.mystXp = mystXp;
         this.maxMana = maxMana;
@@ -62,13 +62,13 @@ public class MysticismManaPacket { // TODO: Buffer xp updates. XP: They break 20
 
     public void encode(PacketBuffer buffer) {
         buffer.writeInt(this.mystLevel);
-        buffer.writeFloat(this.mystXp);
-        buffer.writeFloat(this.maxMana);
-        buffer.writeFloat(this.currentMana);
+        buffer.writeDouble(this.mystXp);
+        buffer.writeDouble(this.maxMana);
+        buffer.writeDouble(this.currentMana);
         buffer.writeEnumValue(this.primaryForce);
         CompoundNBT attTag = new CompoundNBT();
         for (Force force : this.attenuation.keySet()) {
-            attTag.putFloat(force.name(), this.attenuation.get(force));
+            attTag.putDouble(force.name(), this.attenuation.get(force));
         }
         buffer.writeCompoundTag(attTag);
     }

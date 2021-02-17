@@ -1,7 +1,7 @@
 package com.bsixel.mysticism.common.networking.packets;
 
-import com.bsixel.mysticism.common.capability.mana.IManaHolder;
-import com.bsixel.mysticism.common.capability.mana.ManaCapability;
+import com.bsixel.mysticism.common.api.capability.mana.IManaHolder;
+import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
 import com.bsixel.mysticism.common.events.PlayerEventHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;

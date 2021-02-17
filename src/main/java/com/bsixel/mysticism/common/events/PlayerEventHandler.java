@@ -1,7 +1,7 @@
 package com.bsixel.mysticism.common.events;
 
-import com.bsixel.mysticism.common.capability.mana.IManaHolder;
-import com.bsixel.mysticism.common.capability.mana.ManaCapability;
+import com.bsixel.mysticism.common.api.capability.mana.IManaHolder;
+import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
 import com.bsixel.mysticism.common.networking.NetworkManager;
 import com.bsixel.mysticism.common.networking.packets.MysticismManaPacket;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,7 +34,7 @@ public class PlayerEventHandler { // NOTE: These should all be serverside
         }
 
         int manaRegenRate = 5;
-        event.player.getCapability(ManaCapability.mana_cap, null).ifPresent(playerMana -> {
+        event.player.getCapability(ManaCapability.mana_cap, null).ifPresent(playerMana -> { // TODO: Figure out how to add delay to mana regen so you're not regenerating as you cast...
             if (playerMana.isRefillable()) { // If mana is full obviously we shouldn't regen
                 playerMana.addMana(manaRegenRate);
                 updatePlayerMana(event.player, playerMana);

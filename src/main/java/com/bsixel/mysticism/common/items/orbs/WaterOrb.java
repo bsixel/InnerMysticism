@@ -1,6 +1,6 @@
 package com.bsixel.mysticism.common.items.orbs;
 
-import com.bsixel.mysticism.common.capability.mana.Force;
+import com.bsixel.mysticism.common.api.capability.mana.Force;
 
 public class WaterOrb extends ForceOrb {
 

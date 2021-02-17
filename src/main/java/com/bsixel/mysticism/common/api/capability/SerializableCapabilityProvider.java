@@ -1,4 +1,4 @@
-package com.bsixel.mysticism.common.capability;
+package com.bsixel.mysticism.common.api.capability;
 
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;

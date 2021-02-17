@@ -1,4 +1,4 @@
-package com.bsixel.mysticism.common.capability.mana;
+package com.bsixel.mysticism.common.api.capability.mana;
 
 public enum Force { // TODO: TOSSING EVENTUAL IDEAS PER FORCE IN HERE UNTIL I HAVE A BETTER PLACE
     /*

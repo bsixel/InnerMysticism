@@ -1,7 +1,6 @@
 package com.bsixel.mysticism.common.commands;
 
-import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.common.capability.mana.ManaCapability;
+import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
 import com.bsixel.mysticism.common.networking.NetworkManager;
 import com.bsixel.mysticism.common.networking.packets.MysticismManaPacket;
 import com.mojang.brigadier.Command;

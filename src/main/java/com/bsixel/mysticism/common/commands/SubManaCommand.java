@@ -1,8 +1,6 @@
 package com.bsixel.mysticism.common.commands;
 
-import com.bsixel.mysticism.common.capability.mana.ManaCapability;
-import com.bsixel.mysticism.common.networking.NetworkManager;
-import com.bsixel.mysticism.common.networking.packets.MysticismManaPacket;
+import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -11,8 +9,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 
 public class SubManaCommand implements Command<CommandSource> {
     private static final SubManaCommand cmd = new SubManaCommand();

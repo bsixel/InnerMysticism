@@ -1,7 +1,7 @@
 package com.bsixel.mysticism.common.blocks.tileentities;
 
-import com.bsixel.mysticism.common.capability.mana.Force;
-import com.bsixel.mysticism.common.capability.mana.IManaHolder;
+import com.bsixel.mysticism.common.api.capability.mana.Force;
+import com.bsixel.mysticism.common.api.capability.mana.IManaHolder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -14,13 +14,13 @@ import java.util.Map;
 public abstract class MysticismManaTileEntity extends TileEntity implements IManaHolder {
 
     private int mysticismLevel = 0;
-    private float mysticismXp = 0;
-    private float maxMana = 1000;
-    private float currentMana = 0;
+    private double mysticismXp = 0;
+    private double maxMana = 1000;
+    private double currentMana = 0;
     public boolean isLocked = false;
     private String owner = null; // By default things have no owner
     private Force force = Force.BALANCE; // By default, the world is bound to balance
-    private Map<Force, Float> attenuation = new HashMap<>();
+    private Map<Force, Double> attenuation = new HashMap<>();
 
     public MysticismManaTileEntity(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
@@ -37,33 +37,33 @@ public abstract class MysticismManaTileEntity extends TileEntity implements IMan
     }
 
     @Override
-    public float getMysticismXp() {
+    public double getMysticismXp() {
         return this.mysticismXp;
     }
 
     @Override
-    public void setMysticismXp(float xp) {
+    public void setMysticismXp(double xp) {
         this.mysticismXp = xp;
     }
 
     @Override
-    public float getMaxMana() {
+    public double getMaxMana() {
         return this.maxMana;
     }
 
     @Override
-    public void setMaxMana(float amt) {
+    public void setMaxMana(double amt) {
         this.maxMana = amt;
     }
 
     @Override
-    public float addMaxMana(float amt) {
+    public double addMaxMana(double amt) {
         this.maxMana += amt;
         return this.maxMana;
     }
 
     @Override
-    public float getCurrentMana() {
+    public double getCurrentMana() {
         if (this.currentMana > this.maxMana) {
             this.currentMana = this.maxMana;
         } else if (this.currentMana < 0) {
@@ -78,11 +78,11 @@ public abstract class MysticismManaTileEntity extends TileEntity implements IMan
     }
 
     @Override
-    public void setMana(float amt) {
+    public void setMana(double amt) {
         this.currentMana = amt;
     }
 
-    public float addMana(float amount) { // TODO: I guess this also works to remove mana, maybe rename?
+    public double addMana(double amount) { // TODO: I guess this also works to remove mana, maybe rename?
         this.currentMana += amount;
         markDirty();
         return this.getCurrentMana();
@@ -107,12 +107,12 @@ public abstract class MysticismManaTileEntity extends TileEntity implements IMan
     }
 
     @Override
-    public Map<Force, Float> getAttenuations() {
+    public Map<Force, Double> getAttenuations() {
         return this.attenuation;
     }
 
     @Override
-    public void setForceAttenuation(Force force, float amount) {
+    public void setForceAttenuation(Force force, double amount) {
         markDirty();
         this.attenuation.put(force, amount);
     }
@@ -126,8 +126,8 @@ public abstract class MysticismManaTileEntity extends TileEntity implements IMan
     }
 
     @Override
-    public float getForceAttenuation(Force force) {
-        return this.attenuation.getOrDefault(force, 0f); // By default things have no attenuation to any particular force
+    public double getForceAttenuation(Force force) {
+        return this.attenuation.getOrDefault(force, 0D); // By default things have no attenuation to any particular force
     }
 
     public boolean toggleLocked() {

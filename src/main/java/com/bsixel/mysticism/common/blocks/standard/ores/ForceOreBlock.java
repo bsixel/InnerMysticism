@@ -1,8 +1,7 @@
 package com.bsixel.mysticism.common.blocks.standard.ores;
 
 import com.bsixel.mysticism.common.blocks.MysticismBlock;
-import com.bsixel.mysticism.common.capability.mana.Force;
-import net.minecraft.block.AbstractBlock;
+import com.bsixel.mysticism.common.api.capability.mana.Force;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

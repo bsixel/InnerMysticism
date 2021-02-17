@@ -12,6 +12,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 
+import java.util.UUID;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MysticismMod.MOD_ID)
 public class MysticismMod {
@@ -19,6 +21,7 @@ public class MysticismMod {
     public static final ResourceLocation NET_CHANNEL = new ResourceLocation(MOD_ID + ":net_channel");
     public static final String ver = "1.0";
     public static final MysticismItemGroup item_group = new MysticismItemGroup();
+    public static final UUID FAKE_PLAYER_UUID = UUID.fromString("bffa786a-7019-11eb-9439-0242ac130002");
 
     private static final Logger logger = LogManager.getLogger(MOD_ID);
 
