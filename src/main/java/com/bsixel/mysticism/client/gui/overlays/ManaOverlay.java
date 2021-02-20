@@ -1,10 +1,14 @@
-package com.bsixel.mysticism.client.gui;
+package com.bsixel.mysticism.client.gui.overlays;
 
+import com.bsixel.mysticism.client.gui.AbstractMystGui;
 import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ManaOverlay extends AbstractMystGui {
 
     public void renderManaHud(Minecraft minecraft, ClientPlayerEntity player, MatrixStack pane) { // TODO: Make it so the user can move this around!! Annoying to have locked GUIs...

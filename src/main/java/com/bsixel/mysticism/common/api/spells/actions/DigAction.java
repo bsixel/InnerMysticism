@@ -91,11 +91,6 @@ public class DigAction extends BaseSpellComponent implements ISpellAction { // T
     }
 
     @Override
-    public double getCost() {
-        return 10 + this.children.stream().mapToDouble(ISpellComponent::getCost).sum();
-    }
-
-    @Override
     public double getSustainedCost() { // If it's used in a beam or cloud or something
         return 5;
     }

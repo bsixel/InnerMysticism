@@ -36,4 +36,9 @@ public abstract class BaseSpellComponent implements ISpellComponent {
         allowedChildren.add(childPart);
     }
 
+    @Override
+    public double getCost() {
+        return 10 + this.children.stream().mapToDouble(ISpellComponent::getCost).sum();
+    }
+
 }

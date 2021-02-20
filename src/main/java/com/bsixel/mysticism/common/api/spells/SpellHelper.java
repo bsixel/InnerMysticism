@@ -1,7 +1,6 @@
 package com.bsixel.mysticism.common.api.spells;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.common.api.spells.instances.ISpellInstance;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +11,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.world.BlockEvent;
 
-import java.util.*;
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SpellHelper {
@@ -34,6 +37,21 @@ public class SpellHelper {
 
     public static Set<Class<? extends ISpellComponent>> getAllComponents() {
         return registeredSpellComponents.keySet();
+    }
+
+    /**
+     * Returns the registered spell component given the full class name
+     * @param componentName The class name of the spell component. NOTE: This is the full class name, including package!
+     * @return The registered ISpellComponent of the desired type, or null if no match is found for the given class name
+     */
+    public static ISpellComponent getRegisteredComponent(@Nonnull String componentName) {
+        try {
+            Class<?> act = Class.forName("com.bla.TestActivity");
+            return registeredSpellComponents.get(act);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static boolean canEntityBreakPos(World world, LivingEntity breaker, BlockPos pos) { // Check if it's spawn protected or otherwise... unbreakable or whatever. Or we're "clientside". Breaking is done serverside

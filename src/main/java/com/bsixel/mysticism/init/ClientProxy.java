@@ -1,7 +1,7 @@
 package com.bsixel.mysticism.init;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.client.gui.OverlayHandler;
+import com.bsixel.mysticism.client.gui.overlays.OverlayHandler;
 import com.bsixel.mysticism.client.keybindings.KeyHandler;
 import com.bsixel.mysticism.client.keybindings.Keybindings;
 import net.minecraftforge.eventbus.api.EventPriority;

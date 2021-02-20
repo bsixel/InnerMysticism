@@ -1,13 +1,15 @@
-package com.bsixel.mysticism.client.gui;
+package com.bsixel.mysticism.client.gui.overlays;
 
 import com.bsixel.mysticism.MysticismMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
+@OnlyIn(Dist.CLIENT)
 public class OverlayHandler {
 
     private static final Logger logger = LogManager.getLogger(MysticismMod.MOD_ID);

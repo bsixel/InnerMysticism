@@ -3,6 +3,7 @@ package com.bsixel.mysticism.common.utilities;
 import com.bsixel.mysticism.init.registries.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
@@ -51,17 +52,24 @@ public class ItemHelper {
     }
 
     public static ItemStack getToolOrMock(Entity user, BlockState hitState, int minMiningLevel) {
+        ItemStack returnTool = generateMockPick(minMiningLevel);
         if (user instanceof PlayerEntity) { // We're some sorta player, see if we can grab a valid stack to use
             PlayerEntity playerCaster = (PlayerEntity) user;
             ItemStack mainhand = playerCaster.getHeldItemMainhand();
             ItemStack offhand = playerCaster.getHeldItemOffhand();
-            if (mainhand.canHarvestBlock(hitState)) { // TODO: Check and see if this actually does what we think
-                return mainhand;
-            } else if (offhand.canHarvestBlock(hitState)) {
-                return offhand;
+            if (isToolItem(mainhand)) { // Default to using bonus properties of the mainhand tool
+                returnTool = generateMockPick(mainhand.getHarvestLevel(mainhand.getToolTypes().stream().findFirst().get(), null, null));
+                EnchantmentHelper.setEnchantments(EnchantmentHelper.getEnchantments(mainhand), returnTool);
+            } else if (isToolItem(offhand)) {
+                returnTool = generateMockPick(offhand.getHarvestLevel(offhand.getToolTypes().stream().findFirst().get(), null, null));
+                EnchantmentHelper.setEnchantments(EnchantmentHelper.getEnchantments(offhand), returnTool);
             }
         }
-        return generateMockPick(minMiningLevel);
+        return returnTool;
+    }
+
+    public static boolean isToolItem(ItemStack stack) {
+        return stack.getToolTypes().size() > 0;
     }
 
 }
