@@ -7,6 +7,7 @@ import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,10 @@ import java.util.function.Predicate;
     https://github.com/Mithion/ArsMagica2/
  */
 public class MathCrap {
+
+    public static <T extends IPositionableTreeNode<T>> void arrangeTree(@Nonnull IPositionableTreeNode<T> rootNode) {
+
+    }
 
     public static SmartVector bezier(SmartVector s, SmartVector c1, SmartVector c2, SmartVector e, double t){
         if (t < 0 || t > 1.0f){

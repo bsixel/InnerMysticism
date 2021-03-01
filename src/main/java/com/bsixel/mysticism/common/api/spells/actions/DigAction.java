@@ -51,19 +51,20 @@ public class DigAction extends BaseSpellComponent implements ISpellAction { // T
                 }
             }
 
-            if (miningLevel >= initialTargetState.getHarvestLevel() && SpellHelper.canEntityBreakPos(world, caster, trace.getPos())) { // If we're clientside or the block is... safetied by forge or spawn or something, we won't break it
+            if (initialTargetState.getBlockHardness(world, trace.getPos()) != -1 && miningLevel >= initialTargetState.getHarvestLevel() && SpellHelper.canEntityBreakPos(world, caster, trace.getPos())) { // If we're clientside or the block is... safetied by forge or spawn or something, we won't break it
                 // If we have silk touch or fortune, it'll be handled on their end - altering/returning a different itemstack. Maybe? Ugh I have no idea how drops work in this version
                 List<ItemStack> initialDrops = Block.getDrops(initialTargetState, (ServerWorld) world, trace.getPos(), tile, caster, mockBreakerStack);
+                world.destroyBlock(trace.getPos(), false, caster); // False because spell is handling drops, world doesn't need to
                 initialDrops.forEach(itemStack -> {
-                    ItemEntity ent = new ItemEntity(world, trace.getPos().getX(), trace.getPos().getY(), trace.getPos().getZ(), itemStack);
+                    ItemEntity ent = new ItemEntity(world, Math.floor(trace.getPos().getX())+0.5, Math.floor(trace.getPos().getY()), Math.floor(trace.getPos().getZ())+0.5, itemStack);
                     for (ISpellComponent child : children) {
                         if (child instanceof ISpellEnhancement) {
                             ent = (ItemEntity) ((ISpellEnhancement) child).modifyAndReturn(DigAction.class, spellInstance, ent);
                         }
                     }
+                    ent.setVelocity(0, 0, 0);
                     world.addEntity(ent);
                 });
-                world.destroyBlock(trace.getPos(), false, caster); // False because spell is handling drops, world doesn't need to
                 return true;
             }
         }

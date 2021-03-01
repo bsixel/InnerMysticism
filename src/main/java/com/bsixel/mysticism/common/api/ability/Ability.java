@@ -1,9 +1,10 @@
 package com.bsixel.mysticism.common.api.ability;
 
 import com.bsixel.mysticism.common.api.capability.mana.Force;
+import com.bsixel.mysticism.common.api.math.IPositionableTreeNode;
 import com.bsixel.mysticism.common.api.spells.ISpellComponent;
 import com.bsixel.mysticism.common.api.spells.SpellHelper;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -18,33 +19,40 @@ import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 
-public class Ability {
+public class Ability implements IPositionableTreeNode<Ability> {
 
     private static final Map<ResourceLocation, Ability> REGISTRY = new HashMap<>(); // TODO: Probably do this differently, idk. Really have no idea how best to do this
 
+    private final ResourceLocation id; // Unsure exactly how we want to use this, but these should definitely be at least partially data driven
+    private final LinkedList<Ability> children = Lists.newLinkedList();
+    private final Ability parent; // May be null if this is the root of a tree
+    private int childIndex;
+    private int depth;
     private final Force force;
     private final int maxLevel;
     private final int cost;
-    private final ResourceLocation id; // Unsure exactly how we want to use this, but these should definitely be at least partially data driven
     private final ItemStack icon;
     private final ITextComponent name;
     private final ITextComponent description;
     private int xPos;
     private int yPos;
-    private final Set<Ability> children = Sets.newLinkedHashSet();
     private final ISpellComponent unlockedComponent; // May be null if we instead get something else, like an effect. TODO: Still unsure how exactly I want to do this
 
-    public Ability(ResourceLocation id, ItemStack icon, Force force, int maxLevel, int cost, ITextComponent name, ITextComponent description, ISpellComponent unlockedComponent) {
+    public Ability(ResourceLocation id, Ability parent, ItemStack icon, Force force, int maxLevel, int cost, ITextComponent name, ITextComponent description, ISpellComponent unlockedComponent) {
         this.id = id;
+        this.parent = parent;
+        this.childIndex = parent != null ? parent.getChildren().size() : 0; // Zero if this is a root node
+        this.depth = parent != null ? parent.depth + 1 : 0; // Zero if this is a root node
         this.icon = icon;
         this.force = force;
         this.maxLevel = maxLevel;
@@ -62,9 +70,25 @@ public class Ability {
         return REGISTRY.get(id);
     }
 
+    @Override
     public void setPos(int x, int y) {
         this.xPos = x;
         this.yPos = y;
+    }
+
+    @Override
+    public int getX() {
+        return this.xPos;
+    }
+
+    @Override
+    public int getY() {
+        return this.yPos;
+    }
+
+    @Override
+    public Vector2f getPos() {
+        return new Vector2f(this.xPos, this.yPos);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -89,14 +113,15 @@ public class Ability {
     public static Ability deserialize(JsonObject object) {
         ResourceLocation idLocation = object.has("id") ? new ResourceLocation(JSONUtils.getString(object, "id")) : null;
         if (idLocation != null) {
+            Ability parent = REGISTRY.get(new ResourceLocation(JSONUtils.getString(object, "parent_id")));
             Force force = Force.valueOf(JSONUtils.getString(object, "force"));
             ItemStack itemstack = deserializeIcon(JSONUtils.getJsonObject(object, "icon"));
-            int maxLevel = JSONUtils.getInt(object, "maxLevel");
-            int cost = JSONUtils.getInt(object, "cost");
+            int maxLevel = JSONUtils.getInt(object, "maxLevel", 1);
+            int cost = JSONUtils.getInt(object, "cost", 1);
             ITextComponent name = ITextComponent.Serializer.getComponentFromJson(object.get("name"));
             ITextComponent description = ITextComponent.Serializer.getComponentFromJson(object.get("description"));
             String componentClass = JSONUtils.getString(object, "component");
-            return new Ability(idLocation, itemstack, force, maxLevel, cost, name, description, SpellHelper.getRegisteredComponent(componentClass));
+            return new Ability(idLocation, parent, itemstack, force, maxLevel, cost, name, description, SpellHelper.getRegisteredComponent(componentClass));
         } else {
             throw new JsonSyntaxException("Both title and description must be set");
         }
@@ -177,12 +202,39 @@ public class Ability {
         return description;
     }
 
-    public void addChild(Ability child) {
-        this.children.add(child);
+    @Override
+    public LinkedList<Ability> getChildren() {
+        return children;
     }
 
-    public Set<Ability> getChildren() {
-        return children;
+    @Override
+    public Ability getParent() {
+        return this.parent;
+    }
+
+    @Override
+    public int childIndex() {
+        return this.childIndex;
+    }
+
+    @Override
+    public void setChildIndex(int index) {
+        this.childIndex = index;
+    }
+
+    @Override
+    public int depth() {
+        return this.depth;
+    }
+
+    @Override
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
+    @Override
+    public void addChild(Ability child) {
+        this.children.add(child);
     }
 
     public ISpellComponent getUnlockedComponent() {

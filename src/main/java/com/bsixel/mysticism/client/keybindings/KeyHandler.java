@@ -1,6 +1,7 @@
 package com.bsixel.mysticism.client.keybindings;
 
 import com.bsixel.mysticism.MysticismMod;
+import com.bsixel.mysticism.client.gui.screens.ForceAbilityTabGui;
 import com.bsixel.mysticism.common.networking.NetworkManager;
 import com.bsixel.mysticism.common.networking.packets.MysticismCastSpellPacket;
 import net.minecraft.client.Minecraft;
@@ -18,12 +19,14 @@ public class KeyHandler {
 
     public static void handleKeyEvent(InputEvent.KeyInputEvent event) {
         ClientPlayerEntity player = minecraft.player;
-        if (player == null || !minecraft.isGameFocused() || minecraft.isGamePaused()) {
+        if (player == null || !minecraft.isGameFocused() || minecraft.isGamePaused() || minecraft.currentScreen != null) {
             return;
         }
 
         if (event.getKey() == Keybindings.PEW.getKey().getKeyCode() && event.getAction() == GLFW.GLFW_PRESS) {
             handleSpellCast(event);
+        } else if (event.getKey() == Keybindings.MENU.getKey().getKeyCode() && event.getAction() == GLFW.GLFW_PRESS) {
+            ForceAbilityTabGui.open();
         }
 
     }

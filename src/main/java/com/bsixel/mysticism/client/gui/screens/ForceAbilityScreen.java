@@ -20,15 +20,13 @@ public class ForceAbilityScreen extends ScreenBase {
 
     private boolean isScrolling;
 
-    protected ForceAbilityScreen(ITextComponent title, int width, int height) {
-        super(title, width, height);
+    protected ForceAbilityScreen(ITextComponent title) {
+        super(title);
     }
 
     public void rootAdvancementAdded(Force force) {
-        ForceAbilityTabGui forceAbilityTabGui = ForceAbilityTabGui.create(this.minecraft, this, this.tabs.size(), force);
-        if (forceAbilityTabGui != null) {
-            this.tabs.put(force, forceAbilityTabGui);
-        }
+        ForceAbilityTabGui forceAbilityTabGui = ForceAbilityTabGui.create(this, this.tabs.size(), force);
+        this.tabs.put(force, forceAbilityTabGui);
     }
 
 }
