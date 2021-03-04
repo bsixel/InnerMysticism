@@ -43,16 +43,18 @@ public class ForceAbilityTabGui extends ScreenBase {
         this.force = force;
         this.icon = new ItemStack(Items.IRON_PICKAXE); // TODO: Figure out how to icon dynamically; Do we want to load it from a file? Just case it?
 
-        this.sizeX = 179;
-        this.sizeY = 151;
+//        this.sizeX = 179;
+        this.sizeX = 179*2;
+//        this.sizeY = 151;
+        this.sizeY = 151*2;
     }
 
     public static ForceAbilityTabGui create(ForceAbilityScreen screen, int tabIndex, Force force) {
         return new ForceAbilityTabGui(screen, tabIndex, force);
     }
 
-    private static Ability crappyTempAbilityFactory(Ability parent, String name, String description) {
-        return new Ability(new ResourceLocation("test"), parent, new ItemStack(Items.NETHER_STAR), Force.BALANCE, 1, 0, new StringTextComponent(name), new StringTextComponent(description), null);
+    private static Ability crappyTempAbilityFactory(String id, Ability parent, String name, String description) {
+        return new Ability(new ResourceLocation(id), parent, new ItemStack(Items.NETHER_STAR), Force.BALANCE, 1, 0, new StringTextComponent(name), new StringTextComponent(description), null);
     }
 
     @Override
@@ -60,7 +62,7 @@ public class ForceAbilityTabGui extends ScreenBase {
         super.init(); // TODO: Figure out what this.width and this.height actually are. Seem to be related to screen size? Maybe?
         this.guiLeft = (this.width - this.sizeX) / 2; // Quarter from left
         this.guiTop = (this.height - this.sizeY) / 2; // Quarter from top
-        this.root = crappyTempAbilityFactory(null, "Root", "First test!");
+        this.root = crappyTempAbilityFactory("ability_root", null, "Root", "First test!");
         initializeTestTree();
     }
 
@@ -72,19 +74,19 @@ public class ForceAbilityTabGui extends ScreenBase {
     private static final ResourceLocation example_loc = new ResourceLocation(MysticismMod.MOD_ID, "textures/blocks/water-rune.png");
     private int addedNodes = 4;
     private void initializeTestTree() {
-        this.testTree = new Tree<>(this.root, 16, 20, this.guiLeft + this.guiLeft / 4, this.guiTop + 7, 12, Tree.TreeDirection.TOP_DOWN);
-        Ability second = crappyTempAbilityFactory(root, "Second!", "Not first :(");
-        testTree.addNode(second);
-        Ability third = crappyTempAbilityFactory(root, "Third", "Bippity Boppity Boo");
-        testTree.addNode(third);
-        Ability fourth = crappyTempAbilityFactory(third, "Fourth", "42");
-        testTree.addNode(fourth);
+        this.testTree = new Tree<>(this.root, 16, 7, this.guiLeft, this.guiTop + 7, 12, Tree.TreeDirection.TOP_DOWN);
+        Ability second = crappyTempAbilityFactory("ability_second", root, "Second", "Not first :(");
+        testTree.addNode(root, second);
+        Ability third = crappyTempAbilityFactory("ability_third", root, "Third", "Bippity Boppity Boo");
+        testTree.addNode(root, third);
+        Ability fourth = crappyTempAbilityFactory("ability_fourth", third, "Fourth", "42");
+        testTree.addNode(third, fourth);
 //            this.itemRenderer.renderItemIntoGUI(ability.getIcon(), ability.getX(), ability.getY());
         testTree.forEach(this::addAbilityButton);
     }
 
     private void addAbilityButton(Ability ability) {
-        AbilityButton button = new AbilityButton(ability.getX(), ability.getY(), testTree.getNodeSize(), testTree.getNodeSize(), ability.getName(), press -> addAbilityButton(this.testTree.addNode(crappyTempAbilityFactory(ability, "Added: " + addedNodes++, "Another"))),
+        AbilityButton button = new AbilityButton(ability.getX(), ability.getY(), testTree.getNodeSize(), testTree.getNodeSize(), ability.getName(), press -> addAbilityButton(this.testTree.addNode(ability, crappyTempAbilityFactory("ability_"+this.addedNodes, ability, "Added " + addedNodes++, "Another"))),
                 (p_onTooltip_1_, p_onTooltip_2_, p_onTooltip_3_, p_onTooltip_4_) -> this.renderTooltip(p_onTooltip_2_, this.minecraft.fontRenderer.trimStringToWidth(new TranslationTextComponent(ability.getName().getString() + ": " + ability.getDescription().getString()), Math.max(this.width / 2 - 43, 170)), p_onTooltip_3_, p_onTooltip_4_), ability, this.itemRenderer);
         addButton(button);
         this.buttons.forEach(btn -> {

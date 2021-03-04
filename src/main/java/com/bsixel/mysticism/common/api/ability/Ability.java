@@ -36,6 +36,10 @@ public class Ability implements IPositionableTreeNode<Ability> {
     private final ResourceLocation id; // Unsure exactly how we want to use this, but these should definitely be at least partially data driven
     private final LinkedList<Ability> children = Lists.newLinkedList();
     private final Ability parent; // May be null if this is the root of a tree
+    private Ability leftNeighbor; // May be null if this is the root of a tree
+    private Ability rightNeighbor; // May be null if this is the last leaf of a tree
+    private Ability prevNode; // etc
+    private Ability nextLevel;
     private int childIndex;
     private int depth;
     private final Force force;
@@ -45,6 +49,8 @@ public class Ability implements IPositionableTreeNode<Ability> {
     private final ITextComponent name;
     private final ITextComponent description;
     private int xPos;
+    private int modifier;
+    private int prelimX;
     private int yPos;
     private final ISpellComponent unlockedComponent; // May be null if we instead get something else, like an effect. TODO: Still unsure how exactly I want to do this
 
@@ -213,6 +219,50 @@ public class Ability implements IPositionableTreeNode<Ability> {
     }
 
     @Override
+    public Ability setLeftNeighbor(Ability node) {
+        this.leftNeighbor = node;
+        return this;
+    }
+
+    @Override
+    public Ability setRightNeighbor(Ability node) {
+        this.rightNeighbor = node;
+        return this;
+    }
+
+    @Override
+    public Ability getLeftNeighbor() {
+        return this.leftNeighbor;
+    }
+
+    @Override
+    public Ability getRightNeighbor() {
+        return this.rightNeighbor;
+    }
+
+    @Override
+    public Ability setPrevNode(Ability prevNode) {
+        this.prevNode = prevNode;
+        return this;
+    }
+
+    @Override
+    public Ability getPrevNode() {
+        return this.prevNode;
+    }
+
+    @Override
+    public Ability setNextLevel(Ability nextLevel) {
+        this.nextLevel = nextLevel;
+        return this;
+    }
+
+    @Override
+    public Ability getNextLevel() {
+        return this.nextLevel;
+    }
+
+    @Override
     public int childIndex() {
         return this.childIndex;
     }
@@ -233,11 +283,56 @@ public class Ability implements IPositionableTreeNode<Ability> {
     }
 
     @Override
+    public void setModifier(int modifier) {
+        this.modifier = modifier;
+    }
+
+    @Override
+    public int getModifier() {
+        return this.modifier;
+    }
+
+    @Override
+    public void setPrelimX(int x) {
+        this.prelimX = x;
+    }
+
+    @Override
+    public int getPrelimX() {
+        return this.prelimX;
+    }
+
+    /**
+     * Please use Tree.addNode instead
+     * @param child
+     */
+    @Override
+    @Deprecated
     public void addChild(Ability child) {
+        int childrenSize = this.getChildren().size();
+        if (childrenSize > 0) {
+            child.setLeftNeighbor(this.getChildren().get(childrenSize-1));
+        } else {
+            child.setLeftNeighbor(null);
+        }
+        child.setRightNeighbor(null);
         this.children.add(child);
+    }
+
+    @Override
+    public Ability firstChild() {
+        return this.children.size() > 0 ? this.children.get(0) : null;
     }
 
     public ISpellComponent getUnlockedComponent() {
         return unlockedComponent;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Ability)) {
+            return false;
+        }
+        return ((Ability) obj).name.equals(this.name);
     }
 }
