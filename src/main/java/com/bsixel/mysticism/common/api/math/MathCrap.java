@@ -22,10 +22,6 @@ import java.util.function.Predicate;
  */
 public class MathCrap {
 
-    public static <T extends IPositionableTreeNode<T>> void arrangeTree(@Nonnull IPositionableTreeNode<T> rootNode) {
-
-    }
-
     public static SmartVector bezier(SmartVector s, SmartVector c1, SmartVector c2, SmartVector e, double t){
         if (t < 0 || t > 1.0f){
             throw new InvalidParameterException("t is out of range, with a value of :" + t);

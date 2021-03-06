@@ -4,17 +4,14 @@ import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.client.gui.widgets.AbilityButton;
 import com.bsixel.mysticism.common.api.ability.Ability;
 import com.bsixel.mysticism.common.api.capability.mana.Force;
-import com.bsixel.mysticism.common.api.math.Tree;
+import com.bsixel.mysticism.common.api.math.tree.*;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.ToggleWidget;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -30,11 +27,15 @@ public class ForceAbilityTabGui extends ScreenBase {
     private final Force force;
     private final ItemStack icon;
 //    private final Map<Advancement, AdvancementEntryGui> guis = Maps.newLinkedHashMap();
+    private static final int nodeDistance = 24;
     private double scrollX;
     private double scrollY;
 
-    private Ability root;
-    private Tree<Ability> testTree;
+    private AbilityButton root;
+    private Tree<AbilityButton> testTree;
+    private FixedNodeExtentProvider<AbilityButton> extentProvider;
+    private TreeConfiguration<AbilityButton> treeConfiguration;
+    private TreeLayout<AbilityButton> treeLayout;
 
     public ForceAbilityTabGui(ForceAbilityScreen parentScreen, int index, Force force) {
         super(new StringTextComponent(force.getName()));
@@ -53,16 +54,13 @@ public class ForceAbilityTabGui extends ScreenBase {
         return new ForceAbilityTabGui(screen, tabIndex, force);
     }
 
-    private static Ability crappyTempAbilityFactory(String id, Ability parent, String name, String description) {
-        return new Ability(new ResourceLocation(id), parent, new ItemStack(Items.NETHER_STAR), Force.BALANCE, 1, 0, new StringTextComponent(name), new StringTextComponent(description), null);
-    }
-
     @Override
     protected void init() {
         super.init(); // TODO: Figure out what this.width and this.height actually are. Seem to be related to screen size? Maybe?
         this.guiLeft = (this.width - this.sizeX) / 2; // Quarter from left
         this.guiTop = (this.height - this.sizeY) / 2; // Quarter from top
-        this.root = crappyTempAbilityFactory("ability_root", null, "Root", "First test!");
+        Ability rootAbility = AbilityButton.abilityFactory("ability_root", "Root", "First test!");
+        this.root = new AbilityButton(this.guiLeft, this.guiTop, AbilityButton.getButtonWidth(), AbilityButton.getButtonHeight(), rootAbility.getName(), rootAbility, this, this.itemRenderer);
         initializeTestTree();
     }
 
@@ -74,26 +72,17 @@ public class ForceAbilityTabGui extends ScreenBase {
     private static final ResourceLocation example_loc = new ResourceLocation(MysticismMod.MOD_ID, "textures/blocks/water-rune.png");
     private int addedNodes = 4;
     private void initializeTestTree() {
-        this.testTree = new Tree<>(this.root, 16, 7, this.guiLeft, this.guiTop + 7, 12, Tree.TreeDirection.TOP_DOWN);
-        Ability second = crappyTempAbilityFactory("ability_second", root, "Second", "Not first :(");
-        testTree.addNode(root, second);
-        Ability third = crappyTempAbilityFactory("ability_third", root, "Third", "Bippity Boppity Boo");
-        testTree.addNode(root, third);
-        Ability fourth = crappyTempAbilityFactory("ability_fourth", third, "Fourth", "42");
-        testTree.addNode(third, fourth);
-//            this.itemRenderer.renderItemIntoGUI(ability.getIcon(), ability.getX(), ability.getY());
-        testTree.forEach(this::addAbilityButton);
+        this.testTree = new Tree<>(this.root);
+        this.addButton(this.root);
+        this.extentProvider = new FixedNodeExtentProvider<>(AbilityButton.getButtonHeight(), AbilityButton.getButtonHeight());
+        this.treeConfiguration = new TreeConfiguration<>(nodeDistance, nodeDistance, ITreeConfiguration.Location.Top, ITreeConfiguration.AlignmentInLevel.AwayFromRoot, this.guiLeft, this.guiTop);
+        this.treeLayout = new TreeLayout<>(this.testTree, this.extentProvider, this.treeConfiguration);
     }
 
-    private void addAbilityButton(Ability ability) {
-        AbilityButton button = new AbilityButton(ability.getX(), ability.getY(), testTree.getNodeSize(), testTree.getNodeSize(), ability.getName(), press -> addAbilityButton(this.testTree.addNode(ability, crappyTempAbilityFactory("ability_"+this.addedNodes, ability, "Added " + addedNodes++, "Another"))),
-                (p_onTooltip_1_, p_onTooltip_2_, p_onTooltip_3_, p_onTooltip_4_) -> this.renderTooltip(p_onTooltip_2_, this.minecraft.fontRenderer.trimStringToWidth(new TranslationTextComponent(ability.getName().getString() + ": " + ability.getDescription().getString()), Math.max(this.width / 2 - 43, 170)), p_onTooltip_3_, p_onTooltip_4_), ability, this.itemRenderer);
-        addButton(button);
-        this.buttons.forEach(btn -> {
-            if (btn instanceof AbilityButton) {
-                ((AbilityButton) btn).setPos(((AbilityButton) btn).getAbility().getX(), ((AbilityButton) btn).getAbility().getY());
-            }
-        });
+    public void addAbilityButton(AbilityButton parent, AbilityButton child) {
+        this.addButton(child);
+        this.testTree.addChild(parent, child);
+        this.treeLayout.recalculate();
     }
 
     @Override
@@ -106,7 +95,8 @@ public class ForceAbilityTabGui extends ScreenBase {
     }
 
     protected boolean isAbilityMouseOvered(int mouseX, int mouseY, Ability ability) {
-        return mouseX >= ability.getX() && mouseX <= ability.getX() + testTree.getNodeSize() && mouseY >= ability.getY() && mouseY <= ability.getY() + testTree.getNodeSize();
+        return false; // TODO
+//        return mouseX >= ability.getX() && mouseX <= ability.getX() + testTree.getNodeSize() && mouseY >= ability.getY() && mouseY <= ability.getY() + testTree.getNodeSize();
     }
 
     public static void open() {

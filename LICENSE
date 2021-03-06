@@ -4,3 +4,8 @@ Yes, I got the general gist from the good folks over at https://github.com/CoFH/
 
 If you really want an actual license, everything here is under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International unless otherwise stated.
 License summary: https://tldrlegal.com/license/creative-commons-attribution-noncommercial-sharealike-4.0-international-(cc-by-nc-sa-4.0)
+
+Some assets listed below were either heavily inspired by or taken from (consenting) projects:
+* The class literally called MathCrap (honestly mojang, so much of this should be there already!) was alrgely adapted from Mithion's Ars Magica 2
+* The tree related math classes were taken from https://github.com/abego/treelayout after I struggled to adapt an improved version of Walker's algorithm on my own (WIP - may eventually be replaced by my own, I'd really like to figure that out)
+*

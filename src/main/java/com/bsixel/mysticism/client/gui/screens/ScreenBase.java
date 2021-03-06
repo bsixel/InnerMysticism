@@ -2,10 +2,13 @@ package com.bsixel.mysticism.client.gui.screens;
 
 import com.bsixel.mysticism.MysticismMod;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class ScreenBase extends Screen { // TODO: I'm sure we'll need something in here
@@ -23,6 +26,11 @@ public class ScreenBase extends Screen { // TODO: I'm sure we'll need something 
 
     protected ScreenBase(ITextComponent title) { // TODO, this is really just a test for now
         super(title);
+    }
+
+    @Nonnull
+    public <T extends Widget> T addButton(@Nonnull T button) {
+        return super.addButton(button);
     }
 
     public int getGuiLeft() {
