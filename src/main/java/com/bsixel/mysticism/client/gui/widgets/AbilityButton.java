@@ -5,6 +5,7 @@ import com.bsixel.mysticism.common.api.ability.Ability;
 import com.bsixel.mysticism.common.api.capability.mana.Force;
 import com.bsixel.mysticism.common.api.math.tree.IPositionable;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.item.ItemStack;
@@ -12,6 +13,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -28,8 +30,8 @@ public class AbilityButton extends Button implements IPositionable {
     private static int buttonWidth = 16;
     private static int buttonHeight = 16;
 
-    public AbilityButton(int x, int y, int width, int height, ITextComponent title, @Nonnull Ability ability, @Nonnull ForceAbilityTabGui parentScreen, @Nonnull ItemRenderer itemRenderer) {
-        super(x, y, width, height, title, b -> {});
+    public AbilityButton(int x, int y, int width, int height, ITextComponent title, @Nonnull Ability ability, @Nonnull ForceAbilityTabGui parentScreen, @Nonnull ItemRenderer itemRenderer, ITooltip onTooltip) {
+        super(x, y, width, height, title, b -> {}, onTooltip);
         this.ability = ability;
         this.parentScreen = parentScreen;
         this.itemRenderer = itemRenderer;
@@ -50,7 +52,9 @@ public class AbilityButton extends Button implements IPositionable {
     @Override
     public void onPress() {
         AbilityButton newButton;
-        newButton = new AbilityButton(0, 0, buttonWidth, buttonHeight, ability.getName(), abilityFactory("ability_"+added, "Ability "+added, "The" +added+"nth added ability"), this.parentScreen, this.itemRenderer);
+        Ability newAbility = abilityFactory("ability_"+added++, "Ability "+added, "The " +added+"nth added ability");
+        newButton = new AbilityButton(0, 0, buttonWidth, buttonHeight, ability.getName(), newAbility, this.parentScreen, this.itemRenderer,
+                (p_onTooltip_1_, p_onTooltip_2_, p_onTooltip_3_, p_onTooltip_4_) -> this.parentScreen.renderTooltip(p_onTooltip_2_, Minecraft.getInstance().fontRenderer.trimStringToWidth(new TranslationTextComponent(newAbility.getName().getString() + ": " + newAbility.getDescription().getString() + " Parent: " + this.ability.getName().getString()), Math.max(this.width / 2 - 43, 170)), p_onTooltip_3_, p_onTooltip_4_));
         this.addChild(newButton);
         this.parentScreen.addAbilityButton(this, newButton);
     }

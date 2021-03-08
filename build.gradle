@@ -95,13 +95,14 @@ repositories {
     maven { url "https://dvs1.progwml6.com/files/maven" } // JEI, tinkers, knightstuff
     maven { url "http://maven.tterrag.com/" } // The One Probe, enderio, others
     maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' } // Obviously GeckoLib. For animations
+    maven { url 'https://modmaven.dev/' } // Mekanism
 }
 
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.4-35.1.4'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.0.45'
 
     // Patchouli for in-game documentation
 //    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouliVersion}:api")
@@ -110,6 +111,12 @@ dependencies {
     // JEI For recipes etc
     compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
+
+    // Mekanism for tech compat testing
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
     // The One Probe for... looking at stuff for info idk
     compile fg.deobf(project.dependencies.create("mcjty.theoneprobe:TheOneProbe-${top_version}") {
@@ -132,6 +139,9 @@ dependencies {
 
     // These dependencies get remapped to your current MCP mappings
     // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+
+    // https://mvnrepository.com/artifact/org.abego.treelayout/org.abego.treelayout.core
+    implementation group: 'org.abego.treelayout', name: 'org.abego.treelayout.core', version: '1.0.3'
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

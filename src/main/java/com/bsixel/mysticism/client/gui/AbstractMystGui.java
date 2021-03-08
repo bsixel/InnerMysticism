@@ -5,6 +5,8 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import static com.bsixel.mysticism.client.gui.GuiHelper.parseAlpha;
+
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractMystGui extends AbstractGui {
     // TODO: IngameGui.java L557 func_238454_b_ seems to render xp bar; copy that approach for mana bar, maybe magic xp bar
@@ -21,9 +23,5 @@ public abstract class AbstractMystGui extends AbstractGui {
     protected void renderOutlinedGradient(MatrixStack pane, int leftX, int length, int topY, int height, int totalLength, int borderWidth, String hexFromColor, String hexToColor, String hexBorderColor) {
         fill(pane, leftX-borderWidth, topY-borderWidth, leftX+totalLength+borderWidth, topY+height+borderWidth, parseAlpha(hexBorderColor));
         fillGradient(pane, leftX, topY, leftX+length, topY+height, parseAlpha(hexFromColor), parseAlpha(hexToColor));
-    }
-
-    protected static int parseAlpha(String color) { // Provide just hex color code for standard's sake please! Ex. B7CBB3 , no #
-        return 0xFF000000 | Integer.parseInt(color, 16);
     }
 }

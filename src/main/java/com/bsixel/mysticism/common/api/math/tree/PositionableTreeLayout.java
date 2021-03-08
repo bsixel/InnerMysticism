@@ -1,8 +1,4 @@
 /*
-    Taken from https://raw.githubusercontent.com/abego/treelayout/master/org.abego.treelayout/src/main/java/org/abego/treelayout/TreeLayout.java
- */
-
-/*
  * [The "BSD license"]
  * Copyright (c) 2011, abego Software GmbH, Germany (http://www.abego.org)
  * All rights reserved.
@@ -34,24 +30,39 @@
 
 package com.bsixel.mysticism.common.api.math.tree;
 
+import org.abego.treelayout.Configuration;
+import org.abego.treelayout.Configuration.AlignmentInLevel;
+import org.abego.treelayout.Configuration.Location;
+import org.abego.treelayout.NodeExtentProvider;
+import org.abego.treelayout.TreeForTreeLayout;
+import org.abego.treelayout.internal.util.java.lang.string.StringUtil;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.PrintStream;
 import java.util.*;
 import java.util.Map.Entry;
 
-import static com.bsixel.mysticism.common.api.math.tree.ITreeConfiguration.AlignmentInLevel;
-import static com.bsixel.mysticism.common.api.math.tree.ITreeConfiguration.Location;
+import static org.abego.treelayout.internal.util.Contract.checkArg;
 
 /**
  * Implements the actual tree layout algorithm.
+ * <p>
  * The nodes with their final layout can be retrieved through
  * {@link #getNodeBounds()}.
+ * </p>
+ * See <a href="package-summary.html">this summary</a> to get an overview how to
+ * use TreeLayout.
+ *
  *
  * @author Udo Borkowski (ub@abego.org)
  *
  * @param <TreeNode> Type of elements used as nodes in the tree
  */
-public class TreeLayout<TreeNode> {
+/*
+    @bsixel NOTE: I'd extend Abego's but too much of it is marked private and thus not extendable...
+ */
+public class PositionableTreeLayout<TreeNode extends IPositionable> {
     /*
      * Differences between this implementation and original algorithm
      * --------------------------------------------------------------
@@ -77,28 +88,28 @@ public class TreeLayout<TreeNode> {
     // ------------------------------------------------------------------------
     // tree
 
-    private final ITree<TreeNode> tree;
+    private final PositionableTree<TreeNode> tree;
 
     /**
      * Returns the Tree the layout is created for.
      *
      * @return the Tree the layout is created for
      */
-    public ITree<TreeNode> getTree() {
+    public PositionableTree<TreeNode> getTree() {
         return tree;
     }
 
     // ------------------------------------------------------------------------
     // nodeExtentProvider
 
-    private final INodeExtentProvider<TreeNode> nodeExtentProvider;
+    private final NodeExtentProvider<TreeNode> nodeExtentProvider;
 
     /**
-     * Returns the {@link INodeExtentProvider} used by this {@link TreeLayout}.
+     * Returns the {@link NodeExtentProvider} used by this {@link PositionableTreeLayout}.
      *
-     * @return the {@link INodeExtentProvider} used by this {@link TreeLayout}
+     * @return the {@link NodeExtentProvider} used by this {@link PositionableTreeLayout}
      */
-    public INodeExtentProvider<TreeNode> getNodeExtentProvider() {
+    public NodeExtentProvider<TreeNode> getNodeExtentProvider() {
         return nodeExtentProvider;
     }
 
@@ -146,14 +157,14 @@ public class TreeLayout<TreeNode> {
     // ------------------------------------------------------------------------
     // configuration
 
-    private final ITreeConfiguration<TreeNode> configuration;
+    private final PositionableTreeConfig<TreeNode> configuration;
 
     /**
-     * Returns the Configuration used by this {@link TreeLayout}.
+     * Returns the Configuration used by this {@link PositionableTreeLayout}.
      *
-     * @return the Configuration used by this {@link TreeLayout}
+     * @return the Configuration used by this {@link PositionableTreeLayout}
      */
-    public ITreeConfiguration<TreeNode> getConfiguration() {
+    public PositionableTreeConfig<TreeNode> getConfiguration() {
         return configuration;
     }
 
@@ -225,6 +236,7 @@ public class TreeLayout<TreeNode> {
         }
 
         double size = getNodeThickness(node);
+        // size = nodeExtentProvider.getHeight(node);
         if (oldSize < size) {
             sizeOfLevel.set(level, size);
         }
@@ -257,6 +269,9 @@ public class TreeLayout<TreeNode> {
      * @return the size of the level [level &gt;= 0 &amp;&amp; level &lt; levelCount]
      */
     public double getSizeOfLevel(int level) {
+        checkArg(level >= 0, "level must be >= 0");
+        checkArg(level < getLevelCount(), "level must be < levelCount");
+
         return sizeOfLevel.get(level);
     }
 
@@ -424,7 +439,7 @@ public class TreeLayout<TreeNode> {
      * @return the greatest distinct ancestor of vIMinus and its right neighbor
      *         v
      */
-    private TreeNode ancestor(TreeNode vIMinus, @SuppressWarnings("unused") TreeNode v, TreeNode parentOfV,
+    private TreeNode ancestor(TreeNode vIMinus, TreeNode v, TreeNode parentOfV,
                               TreeNode defaultAncestor) {
         TreeNode ancestor = getAncestor(vIMinus);
 
@@ -475,9 +490,9 @@ public class TreeLayout<TreeNode> {
      * <p>
      * <p>
      * In addition these extra parameters avoid the need for
-     * {@link ITree} to include extra methods "getParent",
+     * {@link TreeForTreeLayout} to include extra methods "getParent",
      * "getLeftSibling", or "getLeftMostSibling". This keeps the interface
-     * {@link ITree} small and avoids redundant implementations.
+     * {@link TreeForTreeLayout} small and avoids redundant implementations.
      *
      * @param v
      * @param defaultAncestor
@@ -571,8 +586,7 @@ public class TreeLayout<TreeNode> {
 
     /**
      * In difference to the original algorithm we also pass in the leftSibling
-     * (see {@link #apportion(Object, Object, Object, Object)} for a
-     * motivation).
+     * (see apportion for a motivation).
      *
      * @param v
      * @param leftSibling
@@ -655,16 +669,15 @@ public class TreeLayout<TreeNode> {
             y = t;
         }
 
+        positions.put(v, new NormalizedPosition(x, y));
+
+        // Add initial positioning
         x += configuration.getInitialX();
         y += configuration.getInitialY();
 
-        positions.put(v, new NormalizedPosition(x, y));
-        if (v instanceof IPositionable) {
-            ((IPositionable) v).setPos((int) x, (int) y);
-        }
-
         // update the bounds
         updateBounds(v, x, y);
+        v.setPos((int) x, (int) y);
 
         // recurse
         if (!tree.isLeaf(v)) {
@@ -714,8 +727,8 @@ public class TreeLayout<TreeNode> {
     /**
      * Creates a TreeLayout for a given tree.
      * <p>
-     * In addition to the tree the {@link INodeExtentProvider} and the
-     * {@link ITreeConfiguration} must be given.
+     * In addition to the tree the {@link NodeExtentProvider} and the
+     * {@link Configuration} must be given.
      *
      * @param tree &nbsp;
      * @param nodeExtentProvider &nbsp;
@@ -725,9 +738,9 @@ public class TreeLayout<TreeNode> {
      *            equality ("equals(...)") when checking nodes. Within a tree
      *            each node must only exist once (using this check).
      */
-    public TreeLayout(ITree<TreeNode> tree,
-                      INodeExtentProvider<TreeNode> nodeExtentProvider,
-                      ITreeConfiguration<TreeNode> configuration, boolean useIdentity) {
+    public PositionableTreeLayout(PositionableTree<TreeNode> tree,
+                                  NodeExtentProvider<TreeNode> nodeExtentProvider,
+                                  PositionableTreeConfig<TreeNode> configuration, boolean useIdentity) {
         this.tree = tree;
         this.nodeExtentProvider = nodeExtentProvider;
         this.configuration = configuration;
@@ -758,6 +771,16 @@ public class TreeLayout<TreeNode> {
     }
 
     public void recalculate() {
+
+        this.mod.clear();
+        this.thread.clear();
+        this.prelim.clear();
+        this.change.clear();
+        this.shift.clear();
+        this.ancestor.clear();
+        this.number.clear();
+        this.positions.clear();
+
         // No need to explicitly set mod, thread and ancestor as their getters
         // are taking care of the initial values. This avoids a full tree walk
         // through and saves some memory as no entries are added for
@@ -769,9 +792,9 @@ public class TreeLayout<TreeNode> {
         secondWalk(r, -getPrelim(r), 0, 0);
     }
 
-    public TreeLayout(ITree<TreeNode> tree,
-                      INodeExtentProvider<TreeNode> nodeExtentProvider,
-                      ITreeConfiguration<TreeNode> configuration) {
+    public PositionableTreeLayout(PositionableTree<TreeNode> tree,
+                                  NodeExtentProvider<TreeNode> nodeExtentProvider,
+                                  PositionableTreeConfig<TreeNode> configuration) {
         this(tree, nodeExtentProvider, configuration, false);
     }
 
@@ -786,5 +809,115 @@ public class TreeLayout<TreeNode> {
         for (TreeNode n : tree.getChildren(newNode)) {
             addUniqueNodes(nodes,n);
         }
+    }
+
+    /**
+     * Check if the tree is a "valid" tree.
+     * <p>
+     * Typically you will use this method during development when you get an
+     * unexpected layout from your trees.
+     * <p>
+     * The following checks are performed:
+     * <ul>
+     * <li>Each node must only occur once in the tree.</li>
+     * </ul>
+     */
+    public void checkTree() {
+        Map<TreeNode, TreeNode> nodes = this.useIdentity ? new IdentityHashMap<>()
+                : new HashMap<>();
+
+        // Traverse the tree and check if each node is only used once.
+        addUniqueNodes(nodes,tree.getRoot());
+    }
+
+    // ------------------------------------------------------------------------
+    // dumpTree
+
+    private void dumpTree(PrintStream output, TreeNode node, int indent,
+                          DumpConfiguration dumpConfiguration) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < indent; i++) {
+            sb.append(dumpConfiguration.indent);
+        }
+
+        if (dumpConfiguration.includeObjectToString) {
+            sb.append("[");
+            sb.append(node.getClass().getName() + "@"
+                    + Integer.toHexString(node.hashCode()));
+            if (node.hashCode() != System.identityHashCode(node)) {
+                sb.append("/identityHashCode:");
+                sb.append(Integer.toHexString(System.identityHashCode(node)));
+            }
+            sb.append("]");
+        }
+
+        sb.append(StringUtil.quote(node != null ? node.toString() : null));
+
+        if (dumpConfiguration.includeNodeSize) {
+            sb.append(" (size: ");
+            sb.append(getNodeWidth(node));
+            sb.append("x");
+            sb.append(getNodeHeight(node));
+            sb.append(")");
+        }
+
+        output.println(sb.toString());
+
+        for (TreeNode n : tree.getChildren(node)) {
+            dumpTree(output, n, indent + 1, dumpConfiguration);
+        }
+    }
+
+    public static class DumpConfiguration {
+        /**
+         * The text used to indent the output per level.
+         */
+        public final String indent;
+        /**
+         * When true the dump also includes the size of each node, otherwise
+         * not.
+         */
+        public final boolean includeNodeSize;
+        /**
+         * When true, the text as returned by {@link Object#toString()}, is
+         * included in the dump, in addition to the text returned by the
+         * possibly overridden toString method of the node. When the hashCode
+         * method is overridden the output will also include the
+         * "identityHashCode".
+         */
+        public final boolean includeObjectToString;
+
+        /**
+         *
+         * @param indent [default: "    "]
+         * @param includeNodeSize [default: false]
+         * @param includePointer [default: false]
+         */
+        public DumpConfiguration(String indent, boolean includeNodeSize,
+                                 boolean includePointer) {
+            this.indent = indent;
+            this.includeNodeSize = includeNodeSize;
+            this.includeObjectToString = includePointer;
+        }
+
+        public DumpConfiguration() {
+            this("    ",false,false);
+        }
+    }
+
+    /**
+     * Prints a dump of the tree to the given printStream, using the node's
+     * "toString" method.
+     *
+     * @param printStream &nbsp;
+     * @param dumpConfiguration
+     *            [default: new DumpConfiguration()]
+     */
+    public void dumpTree(PrintStream printStream, DumpConfiguration dumpConfiguration) {
+        dumpTree(printStream,tree.getRoot(),0, dumpConfiguration);
+    }
+
+    public void dumpTree(PrintStream printStream) {
+        dumpTree(printStream,new DumpConfiguration());
     }
 }
