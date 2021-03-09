@@ -20,7 +20,7 @@ public class ManaOverlay extends AbstractMystGui {
 
             double fillLength = totalLength * (manaStats.getCurrentMana() / manaStats.getMaxMana());
 
-            this.renderOutlinedGradient(pane, leftPad, (int)fillLength, topPad, barThickness, totalLength, 3, "6acdd4", "44bdc7", "435354");
+            this.renderOutlinedGradientHorizontal(pane, leftPad, (int)fillLength, topPad, barThickness, totalLength, 3, "6acdd4", "44bdc7", "435354");
 
         });
     }

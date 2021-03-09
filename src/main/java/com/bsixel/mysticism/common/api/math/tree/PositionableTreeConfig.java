@@ -21,6 +21,14 @@ public class PositionableTreeConfig<Node extends IPositionable> extends DefaultC
         super(gapBetweenLevels, gapBetweenNodes);
     }
 
+    public void setInitialX(int initialX) {
+        this.initialX = initialX;
+    }
+
+    public void setInitialY(int initialY) {
+        this.initialY = initialY;
+    }
+
     public int getInitialX() {
         return initialX;
     }

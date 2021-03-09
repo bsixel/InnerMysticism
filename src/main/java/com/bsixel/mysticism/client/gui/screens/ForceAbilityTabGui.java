@@ -21,7 +21,9 @@ import org.abego.treelayout.Configuration;
 import org.abego.treelayout.util.FixedNodeExtentProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import static com.bsixel.mysticism.client.gui.GuiHelper.parseAlpha;
@@ -35,8 +37,11 @@ public class ForceAbilityTabGui extends ScreenBase {
     private final int index;
     private final Force force;
     private final ItemStack icon;
-//    private final Map<Advancement, AdvancementEntryGui> guis = Maps.newLinkedHashMap();
     private static final int nodeDistance = 24;
+    private int rootNodeX;
+    private int rootNodeY;
+    private int dragX = 0;
+    private int dragY = 0;
     private double scrollX;
     private double scrollY;
 
@@ -53,10 +58,8 @@ public class ForceAbilityTabGui extends ScreenBase {
         this.force = force;
         this.icon = new ItemStack(Items.IRON_PICKAXE); // TODO: Figure out how to icon dynamically; Do we want to load it from a file? Just case it?
 
-//        this.sizeX = 179;
-        this.sizeX = 179*2;
-//        this.sizeY = 151;
-        this.sizeY = 151*2;
+        this.sizeX = 247;
+        this.sizeY = 165;
     }
 
     public static ForceAbilityTabGui create(ForceAbilityScreen screen, int tabIndex, Force force) {
@@ -65,9 +68,11 @@ public class ForceAbilityTabGui extends ScreenBase {
 
     @Override
     protected void init() {
-        super.init(); // TODO: Figure out what this.width and this.height actually are. Seem to be related to screen size? Maybe?
+        super.init();
         this.guiLeft = (this.width - this.sizeX) / 2; // Quarter from left
         this.guiTop = (this.height - this.sizeY) / 2; // Quarter from top
+        this.rootNodeX = this.guiLeft + 124 - (AbilityButton.getButtonWidth() / 2);
+        this.rootNodeY = this.guiTop + 7;
         Ability rootAbility = AbilityButton.abilityFactory("ability_root", "Root", "First test!");
         this.root = new AbilityButton(this.guiLeft, this.guiTop, AbilityButton.getButtonWidth(), AbilityButton.getButtonHeight(), rootAbility.getName(), rootAbility, this, this.itemRenderer,
                 (p_onTooltip_1_, p_onTooltip_2_, p_onTooltip_3_, p_onTooltip_4_) -> this.renderTooltip(p_onTooltip_2_, this.minecraft.fontRenderer.trimStringToWidth(new TranslationTextComponent(rootAbility.getName().getString() + ": " + rootAbility.getDescription().getString()), Math.max(this.width / 2 - 43, 170)), p_onTooltip_3_, p_onTooltip_4_));
@@ -76,7 +81,7 @@ public class ForceAbilityTabGui extends ScreenBase {
 
     @Override
     public boolean isPauseScreen() {
-        return true;
+        return false;
     }
 
     private static final ResourceLocation example_loc = new ResourceLocation(MysticismMod.MOD_ID, "textures/blocks/water-rune.png");
@@ -85,7 +90,7 @@ public class ForceAbilityTabGui extends ScreenBase {
         this.testTree = new PositionableTree<>(this.root);
         this.addButton(this.root);
         this.extentProvider = new FixedNodeExtentProvider<>(AbilityButton.getButtonHeight(), AbilityButton.getButtonHeight());
-        this.treeConfiguration = new PositionableTreeConfig<>(nodeDistance, nodeDistance, Configuration.Location.Top, Configuration.AlignmentInLevel.AwayFromRoot, this.guiLeft + 57, this.guiTop + 7);
+        this.treeConfiguration = new PositionableTreeConfig<>(nodeDistance, nodeDistance, Configuration.Location.Top, Configuration.AlignmentInLevel.AwayFromRoot, this.rootNodeX, this.rootNodeY);
         this.treeLayout = new PositionableTreeLayout<>(this.testTree, this.extentProvider, this.treeConfiguration);
         this.treeLayout = new PositionableTreeLayout<>(this.testTree, this.extentProvider, this.treeConfiguration);
     }
@@ -96,21 +101,44 @@ public class ForceAbilityTabGui extends ScreenBase {
         this.treeLayout.recalculate();
     }
 
+    private boolean isPointInsideGui(int pointX, int pointY) {
+        return pointX >= this.guiLeft && pointX <= this.guiLeft + this.sizeX && pointY >= this.guiTop && pointY <= this.guiTop + this.sizeY;
+    }
+
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (isPointInsideGui((int) mouseX, (int) mouseY)) {
+            this.dragX += dragX;
+            this.dragY += dragY;
+            this.treeConfiguration.setInitialX(this.rootNodeX + this.dragX);
+            this.treeConfiguration.setInitialY(this.rootNodeY + this.dragY);
+            this.treeLayout.recalculate();
+        }
+        return true;
+    }
+
+    @Override
+    public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(tall_background);
+        this.minecraft.getTextureManager().bindTexture(wide_background);
         /* matrixStack, startLeftPos, startRightPos, zIndex, textureSheetStartX, textureSheetStartY, textureSizeXCrop, textureSizeYCrop, textureSizeXScale, textureSizeYScale */
-        blit(matrixStack, this.guiLeft, this.guiTop, -10, 0F, 0F, this.sizeX, this.sizeY, this.sizeY, this.sizeX);
+        blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.sizeX, this.sizeY);
+
+        // Stop rendering of any buttons outside of the GUI
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        double scale = getGuiScaleFactor();
+        GL11.glScissor((int) (this.guiLeft * scale), (int) (this.guiTop * scale), (int) (this.sizeX * scale), (int) (this.sizeY * scale));
+
         this.buttons.forEach(btn -> {
+            int buttonSize = AbilityButton.getButtonWidth();
+            int halfButton = buttonSize / 2;
+            btn.visible = isPointInsideGui(btn.x + halfButton, btn.y + halfButton);
             if (btn instanceof AbilityButton) {
                 AbilityButton abilityBtn = (AbilityButton) btn;
                 List<AbilityButton> children = this.testTree.getChildrenList(abilityBtn);
                 if (!children.isEmpty()) {
                     int horizLineLevel = (int) (btn.y + this.treeConfiguration.getGapBetweenLevels(0));
                     int lineColor = parseAlpha("#3068c2");
-                    int buttonSize = AbilityButton.getButtonWidth();
-                    int halfButton = buttonSize / 2;
                     int buttonBottom = btn.y + buttonSize;
                     int buttonMiddle = btn.x + halfButton;
                     AbilityButton firstChild = this.testTree.getFirstChild(abilityBtn);
@@ -125,12 +153,10 @@ public class ForceAbilityTabGui extends ScreenBase {
                 }
             }
         });
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-    }
 
-    protected boolean isAbilityMouseOvered(int mouseX, int mouseY, Ability ability) {
-        return false; // TODO
-//        return mouseX >= ability.getX() && mouseX <= ability.getX() + testTree.getNodeSize() && mouseY >= ability.getY() && mouseY <= ability.getY() + testTree.getNodeSize();
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 
     public static void open() {

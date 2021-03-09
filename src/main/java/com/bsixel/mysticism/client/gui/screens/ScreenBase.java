@@ -1,6 +1,7 @@
 package com.bsixel.mysticism.client.gui.screens;
 
 import com.bsixel.mysticism.MysticismMod;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.ResourceLocation;
@@ -48,6 +49,11 @@ public class ScreenBase extends Screen { // TODO: I'm sure we'll need something 
     public int getSizeY() {
         return sizeY;
     }
+
+    protected double getGuiScaleFactor() {
+        return minecraft.getMainWindow().getGuiScaleFactor();
+    }
+
 }
 // Most reasonable blit explanation I've seen: https://forums.minecraftforge.net/topic/77532-1144solved-scale-image-with-blit/
 //Some blit param namings , thank you Mekanism

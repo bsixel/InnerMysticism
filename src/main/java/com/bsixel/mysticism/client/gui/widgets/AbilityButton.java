@@ -39,9 +39,11 @@ public class AbilityButton extends Button implements IPositionable {
 
     @Override
     public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.itemRenderer.renderItemIntoGUI(this.ability.getIcon(), this.x, this.y);
-        if (this.isHovered()) {
-            this.renderToolTip(matrixStack, mouseX, mouseY);
+        if (this.visible) {
+            this.itemRenderer.renderItemIntoGUI(this.ability.getIcon(), this.x, this.y);
+            if (this.isHovered()) {
+                this.renderToolTip(matrixStack, mouseX, mouseY);
+            }
         }
     }
 
@@ -58,6 +60,8 @@ public class AbilityButton extends Button implements IPositionable {
         this.addChild(newButton);
         this.parentScreen.addAbilityButton(this, newButton);
     }
+
+
 
     public void setPos(int x, int y) {
         this.x = x;

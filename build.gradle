@@ -96,6 +96,7 @@ repositories {
     maven { url "http://maven.tterrag.com/" } // The One Probe, enderio, others
     maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' } // Obviously GeckoLib. For animations
     maven { url 'https://modmaven.dev/' } // Mekanism
+    maven { url "https://maven.shedaniel.me/" } // Cloth config (config screen API)
 }
 
 dependencies {
@@ -107,6 +108,9 @@ dependencies {
     // Patchouli for in-game documentation
 //    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouliVersion}:api")
 //    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouliVersion}")
+
+    // Cloth config for config screen API
+//    api(fg.deobf("me.shedaniel.cloth:cloth-config-forge:4.11.14"))
 
     // JEI For recipes etc
     compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")

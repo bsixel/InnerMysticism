@@ -23,12 +23,11 @@ public class KeyHandler {
             return;
         }
 
-        if (event.getKey() == Keybindings.PEW.getKey().getKeyCode() && event.getAction() == GLFW.GLFW_PRESS) {
+        if (event.getKey() == Keybindings.PEW.getKey().getKeyCode() && event.getAction() == GLFW.GLFW_PRESS) { // TODO: Figure out how to stop key propagation
             handleSpellCast(event);
         } else if (event.getKey() == Keybindings.MENU.getKey().getKeyCode() && event.getAction() == GLFW.GLFW_PRESS) {
             ForceAbilityTabGui.open();
         }
-
     }
 
     private static void handleSpellCast(InputEvent.KeyInputEvent event) { // TODO: This should maybe be elsewhere, move once we've got actual spells going back into the casting package? Although this should really just trigger serverside spell execution
