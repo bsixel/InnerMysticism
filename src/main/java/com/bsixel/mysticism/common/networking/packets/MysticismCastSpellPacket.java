@@ -1,13 +1,17 @@
 package com.bsixel.mysticism.common.networking.packets;
 
+import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.common.api.capability.mana.IManaHolder;
 import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
 import com.bsixel.mysticism.common.api.spells.Spell;
+import com.bsixel.mysticism.common.api.spells.SpellComponentInstance;
+import com.bsixel.mysticism.common.api.spells.SpellHelper;
 import com.bsixel.mysticism.common.api.spells.actions.DigAction;
 import com.bsixel.mysticism.common.api.spells.casttypes.SpellCastTypeTouch;
 import com.bsixel.mysticism.common.events.PlayerEventHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
@@ -42,13 +46,17 @@ public class MysticismCastSpellPacket {
             if (player != null) { // Shouldn't ever be null but you never know
                 Spell testSpell = buildTestSpell(player);
                 player.getCapability(ManaCapability.mana_cap, null).ifPresent(playerMana -> {
-                    if (playerMana.getCurrentMana() >= 100) {
+                    double spellCost = testSpell.getCost();
+                    if (playerMana.getCurrentMana() >= spellCost) {
                         player.heal(10f);
                         player.getFoodStats().setFoodLevel(20);
-                        playerMana.addMana(-100f);
                         // TODO: Expend the spell's mana
+                        playerMana.addMana(-spellCost);
                         testSpell.cast(player);
+                        playerMana.setManaLastUsed(); // Reset regen cooldown
                         PlayerEventHandler.updatePlayerMana(player, playerMana);
+                    } else {
+                        // TODO: Something interesting if they try to expend mana they don't have
                     }
                 });
             }
@@ -56,10 +64,10 @@ public class MysticismCastSpellPacket {
         ctx.get().setPacketHandled(true);
     }
 
-    private static Spell buildTestSpell(ServerPlayerEntity player) {
-        Spell spell = new Spell(player, player.getPosition(), player.world);
-        spell.initialCastType = new SpellCastTypeTouch(spell, null);
-        spell.initialCastType.getChildren().add(new DigAction());
+    private static Spell buildTestSpell(ServerPlayerEntity player) { // Bad example, most of the time the resource locations won't be newly created
+        Spell spell = new Spell(player, player.getPosition(), player.world.getDimensionKey().getRegistryName().toString());
+        spell.root = new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.touch")));
+        spell.root.getChildren().add(new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.dig"))));
         return spell;
     }
 

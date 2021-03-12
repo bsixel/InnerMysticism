@@ -1,7 +1,7 @@
 package com.bsixel.mysticism.client.gui.screens;
 
 import com.bsixel.mysticism.MysticismMod;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.ResourceLocation;
@@ -52,6 +52,10 @@ public class ScreenBase extends Screen { // TODO: I'm sure we'll need something 
 
     protected double getGuiScaleFactor() {
         return minecraft.getMainWindow().getGuiScaleFactor();
+    }
+
+    public FontRenderer getFontRenderer() {
+        return this.font;
     }
 
 }

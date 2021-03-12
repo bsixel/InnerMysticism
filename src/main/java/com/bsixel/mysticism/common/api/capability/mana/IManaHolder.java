@@ -7,6 +7,8 @@ import java.util.Map;
 public interface IManaHolder {
     default double getMaxMana() { return 0; };
     default double getCurrentMana() { return 0; };
+    void setManaLastUsed();
+    long getManaLastUsed();
     boolean isRefillable();
     double addMana(double amt);
     void setMana(double amt);

@@ -1,14 +1,21 @@
 package com.bsixel.mysticism.common.api.spells.enhancements;
 
+import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.common.api.capability.mana.Force;
 import com.bsixel.mysticism.common.api.spells.BaseSpellComponent;
 import com.bsixel.mysticism.common.api.spells.ISpellComponent;
 import com.bsixel.mysticism.common.api.spells.instances.ISpellInstance;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SpellEnhancementPower extends BaseSpellComponent implements ISpellEnhancement {
+
+    private static final ResourceLocation location = new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.power");
 
     private static final Map<Class<? extends ISpellComponent>, Double> powerMapping = new HashMap<>();
 
@@ -31,13 +38,23 @@ public class SpellEnhancementPower extends BaseSpellComponent implements ISpellE
     }
 
     @Override
-    public String getName() {
-        return "Power";
+    public TranslationTextComponent getName() {
+        return new TranslationTextComponent("spell.component.power.name");
     }
 
     @Override
-    public String getDescription() {
-        return "Enhances the overall power of a component. Can be reversed with a Reversal enhancement";
+    public TranslationTextComponent getDescription() {
+        return new TranslationTextComponent("spell.component.power.description");
+    }
+
+    @Override
+    public ResourceLocation getResourceLocation() {
+        return location;
+    }
+
+    @Override
+    public ItemStack getIcon() {
+        return new ItemStack(Items.DIAMOND_PICKAXE);
     }
 
     @Override

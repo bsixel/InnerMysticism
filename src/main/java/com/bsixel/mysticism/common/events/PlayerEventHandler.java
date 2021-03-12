@@ -29,13 +29,14 @@ public class PlayerEventHandler { // NOTE: These should all be serverside
     }
 
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.player.getEntityWorld().isRemote || event.player.getEntityWorld().getGameTime() % 2 != 0) { // Only update mana every 2 ticks, TODO: Add config for mana rates, etc. Do we still need to manually send mana data every time there's a mana action? Probably should to avoid desync... Should add manaTooLow event or something
+        //  TODO: Add config for mana rates, etc. Do we still need to manually send mana data every time there's a mana action? Probably should to avoid desync... Should add manaTooLow event or something
+        if (event.player.getEntityWorld().isRemote || event.player.getEntityWorld().getGameTime() % 2 != 0) { // Only update mana every 2 ticks
             return;
         }
 
         int manaRegenRate = 5;
         event.player.getCapability(ManaCapability.mana_cap, null).ifPresent(playerMana -> { // TODO: Figure out how to add delay to mana regen so you're not regenerating as you cast...
-            if (playerMana.isRefillable()) { // If mana is full obviously we shouldn't regen
+            if (playerMana.isRefillable() && (playerMana.getManaLastUsed() + 1300 < System.currentTimeMillis())) { // If mana is full obviously we shouldn't regen
                 playerMana.addMana(manaRegenRate);
                 updatePlayerMana(event.player, playerMana);
             }

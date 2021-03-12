@@ -10,8 +10,9 @@ public class DefaultManaHolder implements IManaHolder {
     private final LivingEntity attachedEntity;
     private int mysticismLevel = 0;
     private double mysticismXp = 0;
-    private double maxMana = 1000;
+    private double maxMana = 100;
     private double currentMana = 0;
+    private long manaLastUsed = System.currentTimeMillis();
     private Force force = Force.BALANCE; // By default, the world is bound to balance
     private Map<Force, Double> attenuation = new HashMap<>();
 
@@ -72,6 +73,16 @@ public class DefaultManaHolder implements IManaHolder {
     public double getCurrentMana() {
         this.fixCurrentMana();
         return this.currentMana;
+    }
+
+    @Override
+    public void setManaLastUsed() {
+        this.manaLastUsed = System.currentTimeMillis();
+    }
+
+    @Override
+    public long getManaLastUsed() {
+        return this.manaLastUsed;
     }
 
     @Override

@@ -3,6 +3,10 @@ package com.bsixel.mysticism.common.api.spells;
 import com.bsixel.mysticism.common.api.capability.mana.Force;
 import com.bsixel.mysticism.common.api.spells.actions.ISpellAction;
 import javafx.scene.paint.Color;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
 
@@ -12,11 +16,13 @@ public interface ISpellComponent {
     // will not be evaluated in (non-creative) casts and you won't be able to add it to new spells
     boolean isActive();
 
-    String getName();
-    String getDescription();
+    TranslationTextComponent getName();
+    TranslationTextComponent getDescription();
+    ResourceLocation getResourceLocation();
+    ItemStack getIcon();
     double getAttenuationToForce(Force force);
     double getCost();
-    double getSustainedCost(); // TODO: This should maybe be a mult
+    double getSustainedCost(); // TODO: This should maybe be a mult?
     boolean isChildAllowed(Class<? extends ISpellComponent> childPart);
     void addAllowedChild(Class<? extends ISpellComponent> childPart);
 
@@ -27,7 +33,4 @@ public interface ISpellComponent {
         return null;
     }
 
-    List<ISpellComponent> getChildren();
-    Spell getParentSpell();
-    ISpellComponent getParentSpellComponent(); // TODO: Remove if we never end up using it anyways
 }

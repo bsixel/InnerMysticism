@@ -1,7 +1,7 @@
 package com.bsixel.mysticism.client.keybindings;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.client.gui.screens.ForceAbilityTabGui;
+import com.bsixel.mysticism.client.gui.screens.SpellcraftingGui;
 import com.bsixel.mysticism.common.networking.NetworkManager;
 import com.bsixel.mysticism.common.networking.packets.MysticismCastSpellPacket;
 import net.minecraft.client.Minecraft;
@@ -26,7 +26,7 @@ public class KeyHandler {
         if (event.getKey() == Keybindings.PEW.getKey().getKeyCode() && event.getAction() == GLFW.GLFW_PRESS) { // TODO: Figure out how to stop key propagation
             handleSpellCast(event);
         } else if (event.getKey() == Keybindings.MENU.getKey().getKeyCode() && event.getAction() == GLFW.GLFW_PRESS) {
-            ForceAbilityTabGui.open();
+            SpellcraftingGui.open();
         }
     }
 

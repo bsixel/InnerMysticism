@@ -86,8 +86,8 @@ public class Ability {
             int cost = JSONUtils.getInt(object, "cost", 1);
             ITextComponent name = ITextComponent.Serializer.getComponentFromJson(object.get("name"));
             ITextComponent description = ITextComponent.Serializer.getComponentFromJson(object.get("description"));
-            String componentClass = JSONUtils.getString(object, "component");
-            return new Ability(idLocation, itemstack, force, maxLevel, cost, name, description, SpellHelper.getRegisteredComponent(componentClass));
+            String componentLocation = JSONUtils.getString(object, "component");
+            return new Ability(idLocation, itemstack, force, maxLevel, cost, name, description, SpellHelper.getRegisteredComponent(new ResourceLocation(componentLocation)));
         } else {
             throw new JsonSyntaxException("Both title and description must be set");
         }

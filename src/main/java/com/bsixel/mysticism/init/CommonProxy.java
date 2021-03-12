@@ -3,7 +3,9 @@ package com.bsixel.mysticism.init;
 import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
 import com.bsixel.mysticism.common.api.spells.SpellHelper;
+import com.bsixel.mysticism.common.api.spells.actions.DigAction;
 import com.bsixel.mysticism.common.api.spells.casttypes.SpellCastTypeTouch;
+import com.bsixel.mysticism.common.api.spells.enhancements.SpellEnhancementPower;
 import com.bsixel.mysticism.common.commands.CommandRegistrar;
 import com.bsixel.mysticism.common.events.PlayerEventHandler;
 import com.bsixel.mysticism.common.networking.NetworkManager;
@@ -67,6 +69,8 @@ public class CommonProxy { // TODO: Maybe break out into separate initializers f
 
     private void selfRegisterSpellComponents() {
         SpellHelper.registerSpellComponent(new SpellCastTypeTouch()); // Or whatever TODO: Actually register any new ones we make here
+        SpellHelper.registerSpellComponent(new DigAction());
+        SpellHelper.registerSpellComponent(new SpellEnhancementPower());
     }
 
     private void registerCommonSetup(FMLCommonSetupEvent event) {

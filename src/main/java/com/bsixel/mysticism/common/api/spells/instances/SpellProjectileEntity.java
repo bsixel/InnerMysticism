@@ -63,7 +63,7 @@ public class SpellProjectileEntity extends ArrowEntity implements ISpellInstance
 
     @Override
     public void onInteractWithEntity() {
-        spell.initialCastType.cast((LivingEntity) world.getEntityByID(getCasterId())); // TODO: FIX
+        spell.cast((LivingEntity) world.getEntityByID(getCasterId())); // TODO: FIX
     }
 
     @Override

@@ -43,7 +43,7 @@ public class SpellSustainedEntity extends AreaEffectCloudEntity implements ISpel
 
     @Override
     public void onInteractWithEntity() {
-        spell.initialCastType.cast((LivingEntity) world.getEntityByID(getCasterId())); // TODO: FIX
+        spell.cast((LivingEntity) world.getEntityByID(getCasterId())); // TODO: FIX
     }
 
     @Override
