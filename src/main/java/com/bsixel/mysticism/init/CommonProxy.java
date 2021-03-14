@@ -2,6 +2,7 @@ package com.bsixel.mysticism.init;
 
 import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
+import com.bsixel.mysticism.common.api.capability.spellcasting.SpellcasterCapability;
 import com.bsixel.mysticism.common.api.spells.SpellHelper;
 import com.bsixel.mysticism.common.api.spells.actions.DigAction;
 import com.bsixel.mysticism.common.api.spells.casttypes.SpellCastTypeTouch;
@@ -75,6 +76,7 @@ public class CommonProxy { // TODO: Maybe break out into separate initializers f
 
     private void registerCommonSetup(FMLCommonSetupEvent event) {
         ManaCapability.register();
+        SpellcasterCapability.register();
         NetworkManager.register();
     }
 

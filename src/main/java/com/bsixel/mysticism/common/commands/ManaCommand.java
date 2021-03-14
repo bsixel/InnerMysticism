@@ -25,7 +25,6 @@ public class ManaCommand implements Command<CommandSource> {
     public int run(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
         ServerPlayerEntity player = ctx.getSource().asPlayer(); //TODO: Bad practice, be safe at some point
         player.getCapability(ManaCapability.mana_cap, null).ifPresent(playerMana -> {
-            playerMana.addMaxMana(1000);
             ctx.getSource().sendFeedback(new StringTextComponent("Player mana: " + playerMana.getCurrentMana()).mergeStyle(TextFormatting.BLUE), true);
             NetworkManager.channel.sendToSpecPlayer(player, new MysticismManaPacket(playerMana));
         });

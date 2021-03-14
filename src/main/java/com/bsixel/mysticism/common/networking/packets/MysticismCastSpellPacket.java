@@ -1,20 +1,13 @@
 package com.bsixel.mysticism.common.networking.packets;
 
-import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.common.api.capability.mana.IManaHolder;
 import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
-import com.bsixel.mysticism.common.api.spells.Spell;
-import com.bsixel.mysticism.common.api.spells.SpellComponentInstance;
-import com.bsixel.mysticism.common.api.spells.SpellHelper;
-import com.bsixel.mysticism.common.api.spells.actions.DigAction;
-import com.bsixel.mysticism.common.api.spells.casttypes.SpellCastTypeTouch;
+import com.bsixel.mysticism.common.api.capability.spellcasting.SpellcasterCapability;
 import com.bsixel.mysticism.common.events.PlayerEventHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 // TODO: Useful note for later: PacketBuffer can .writeItemStack and .writeCompoundTag (CompoundNBT)
@@ -23,9 +16,6 @@ import java.util.function.Supplier;
 public class MysticismCastSpellPacket {
 
     public MysticismCastSpellPacket(PacketBuffer buffer) {
-    }
-
-    public MysticismCastSpellPacket(IManaHolder manaData) {
     }
 
     public MysticismCastSpellPacket() {
@@ -44,31 +34,25 @@ public class MysticismCastSpellPacket {
             // For now to test we're just going to heal the player
             ServerPlayerEntity player = ctx.get().getSender();
             if (player != null) { // Shouldn't ever be null but you never know
-                Spell testSpell = buildTestSpell(player);
                 player.getCapability(ManaCapability.mana_cap, null).ifPresent(playerMana -> {
-                    double spellCost = testSpell.getCost();
-                    if (playerMana.getCurrentMana() >= spellCost) {
-                        player.heal(10f);
-                        player.getFoodStats().setFoodLevel(20);
-                        // TODO: Expend the spell's mana
-                        playerMana.addMana(-spellCost);
-                        testSpell.cast(player);
-                        playerMana.setManaLastUsed(); // Reset regen cooldown
-                        PlayerEventHandler.updatePlayerMana(player, playerMana);
-                    } else {
-                        // TODO: Something interesting if they try to expend mana they don't have
-                    }
+                    player.getCapability(SpellcasterCapability.spellcaster_cap, null).ifPresent(playerCasting -> {
+                        double spellCost = playerCasting.getCurrentSpell().getCost();
+                        if (playerMana.getCurrentMana() >= spellCost || player.isCreative()) { // Player can cast whatever they want in creative
+                            player.heal(10f); // TODO: Remove, useful for testing rn
+                            player.getFoodStats().setFoodLevel(20);
+                            // TODO: Expend the spell's mana
+                            playerMana.addMana(player.isCreative() ? 0 : -spellCost); // Don't expend mana in creative
+                            playerCasting.getCurrentSpell().cast(player);
+                            playerMana.setManaLastUsed(); // Reset regen cooldown
+                            PlayerEventHandler.updatePlayerMana(player, playerMana);
+                        } else {
+                            // TODO: Something interesting if they try to expend mana they don't have
+                        }
+                    });
                 });
             }
         });
         ctx.get().setPacketHandled(true);
-    }
-
-    private static Spell buildTestSpell(ServerPlayerEntity player) { // Bad example, most of the time the resource locations won't be newly created
-        Spell spell = new Spell(player, player.getPosition(), player.world.getDimensionKey().getRegistryName().toString());
-        spell.root = new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.touch")));
-        spell.root.getChildren().add(new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.dig"))));
-        return spell;
     }
 
 }

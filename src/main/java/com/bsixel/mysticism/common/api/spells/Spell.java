@@ -3,6 +3,8 @@ package com.bsixel.mysticism.common.api.spells;
 import com.bsixel.mysticism.common.api.spells.casttypes.ISpellCastType;
 import javafx.scene.paint.Color;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -19,27 +21,23 @@ public class Spell { // NOTE: This hold the state of a spell, but doesn't repres
     private final String creatorUUID; // Who made this spell? Spells can be copied, maybe we need the original creator TODO: We need a fake player+UUID
     private final String creationDimension;
     private final BlockPos creationPosition;
-
-    public Spell(String creatorUUID, BlockPos pos, String creationDimension) {
-        this.creatorUUID = creatorUUID;
-        this.creationPosition = pos;
-        this.creationDimension = creationDimension;
-    }
+    private String name;
+    private ItemStack icon;
 
     /**
      *
-     * @param creator Who created it
+     * @param creatorUUID Who created it
      * @param pos The initial block position at the time of creation of this spell
      * @param creationDimension dimension.getDimensionKey().getRegistryName().toString()
      */
-    public Spell(LivingEntity creator, BlockPos pos, String creationDimension) { // Living entity should be safe, FakePlayer is a distant inheritor
-        this.creatorUUID = creator.getUniqueID().toString();
+    public Spell(String creatorUUID, BlockPos pos, String creationDimension) { // Living entity should be safe, FakePlayer is a distant inheritor
+        this.creatorUUID = creatorUUID;
         this.creationDimension = creationDimension;
         this.creationPosition = pos;
     }
 
     public Spell(LivingEntity creator) {
-        this(creator, creator.getPosition(), creator.world.getDimensionKey().getRegistryName().toString());
+        this(creator.getUniqueID().toString(), creator.getPosition(), creator.world.getDimensionKey().getRegistryName().toString());
     }
 
     public Spell(LivingEntity creator, SpellComponentInstance root) {
@@ -47,18 +45,22 @@ public class Spell { // NOTE: This hold the state of a spell, but doesn't repres
         this.root = root;
     }
 
-    public static CompoundNBT serialize(Spell spell) {
+    public CompoundNBT serialize() {
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putString("creator", spell.creatorUUID);
-        nbt.putString("dim", spell.creationDimension);
-        nbt.putInt("xPos", spell.creationPosition.getX());
-        nbt.putInt("yPos", spell.creationPosition.getY());
-        nbt.putInt("zPos", spell.creationPosition.getZ());
-        nbt.put("tree", spell.root.serialize());
+        nbt.putString("name", this.name);
+        nbt.put("icon", this.icon.serializeNBT());
+        nbt.putString("creator", this.creatorUUID);
+        nbt.putString("dim", this.creationDimension);
+        nbt.putInt("xPos", this.creationPosition.getX());
+        nbt.putInt("yPos", this.creationPosition.getY());
+        nbt.putInt("zPos", this.creationPosition.getZ());
+        nbt.put("tree", this.root.serialize());
         return nbt;
     }
 
-    public static Spell deserialize(World world, CompoundNBT nbt) {
+    public static Spell deserialize(CompoundNBT nbt) {
+        String name = nbt.getString("name");
+        ItemStack icon = ItemStack.read((CompoundNBT) nbt.get("icon"));
         String creator = nbt.getString("creator");
         String dim = nbt.getString("dim");
         int xPos = nbt.getInt("xPos");
@@ -66,7 +68,9 @@ public class Spell { // NOTE: This hold the state of a spell, but doesn't repres
         int zPos = nbt.getInt("zPos");
 
         CompoundNBT rootNbt = (CompoundNBT) nbt.get("tree");
-        Spell spell = new Spell(Objects.requireNonNull(world.getPlayerByUuid(UUID.fromString(creator))), new BlockPos(xPos, yPos, zPos), dim);
+        Spell spell = new Spell(creator, new BlockPos(xPos, yPos, zPos), dim);
+        spell.name = name;
+        spell.icon = icon;
         if (rootNbt != null) {
             spell.root = SpellComponentInstance.deserialize(spell, rootNbt);
         }
@@ -105,6 +109,22 @@ public class Spell { // NOTE: This hold the state of a spell, but doesn't repres
 
     public double getCost() {
         return this.root.getCost();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ItemStack getIcon() {
+        return icon;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIcon(ItemStack icon) {
+        this.icon = icon;
     }
 
 }

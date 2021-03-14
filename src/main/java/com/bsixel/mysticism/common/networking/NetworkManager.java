@@ -1,8 +1,7 @@
 package com.bsixel.mysticism.common.networking;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.common.networking.packets.MysticismCastSpellPacket;
-import com.bsixel.mysticism.common.networking.packets.MysticismManaPacket;
+import com.bsixel.mysticism.common.networking.packets.*;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,6 +20,9 @@ public class NetworkManager {
 
         channel.getChannel().registerMessage(packetId++, MysticismManaPacket.class, MysticismManaPacket::encode, MysticismManaPacket::decode, MysticismManaPacket::handle);
         channel.getChannel().registerMessage(packetId++, MysticismCastSpellPacket.class, MysticismCastSpellPacket::encode, MysticismCastSpellPacket::decode, MysticismCastSpellPacket::handle);
+        channel.getChannel().registerMessage(packetId++, MysticismSpellcasterPacket.class, MysticismSpellcasterPacket::encode, MysticismSpellcasterPacket::decode, MysticismSpellcasterPacket::handle);
+        channel.getChannel().registerMessage(packetId++, GenericCompoundPacket.class, GenericCompoundPacket::encode, GenericCompoundPacket::decode, GenericCompoundPacket::handle);
+        channel.getChannel().registerMessage(packetId++, MysticismClientChangedSpellPacket.class, MysticismClientChangedSpellPacket::encode, MysticismClientChangedSpellPacket::decode, MysticismClientChangedSpellPacket::handle);
 
         return true; // I'd like to know if this succeeded fully
     }

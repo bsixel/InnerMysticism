@@ -7,6 +7,7 @@ import com.bsixel.mysticism.common.api.spells.ISpellComponent;
 import com.bsixel.mysticism.common.api.spells.Spell;
 import com.bsixel.mysticism.common.api.spells.SpellComponentInstance;
 import com.bsixel.mysticism.common.api.spells.actions.ISpellAction;
+import com.bsixel.mysticism.common.api.spells.enhancements.SpellEnhancementPower;
 import com.bsixel.mysticism.common.api.spells.instances.SpellInstanceTouch;
 import javafx.scene.paint.Color;
 import net.minecraft.entity.LivingEntity;
@@ -35,14 +36,15 @@ public class SpellCastTypeTouch extends BaseSpellComponent implements ISpellCast
     @Override
     public boolean cast(LivingEntity caster, SpellComponentInstance wrapper) { // TODO: We'll need to do something different here if they're going AOE touch
         RayTraceResult traceResult = caster.pick(this.calculateRange(caster), 0, this.canTouchFluids());
-        return wrapper.getChildActionComponents().stream().allMatch(child -> {
+        return wrapper.getWrappedChildActionComponents().stream().allMatch(child -> {
+            ISpellAction childAction = (ISpellAction) child.getComponent();
             // TODO: Add another statement for touch-affecting enhancements - range fluid touching etc
             if (traceResult.getType() == RayTraceResult.Type.BLOCK) {
                 BlockRayTraceResult correctedResult = (BlockRayTraceResult) traceResult; // I think this is actually safe?
-                return child.applyToBlock(caster.getEntityWorld(), correctedResult, new SpellInstanceTouch(caster.getEntityId(), caster.getPosition(), caster.getLookVec(), wrapper.getParentSpell()), wrapper); // TODO: Clean
+                return childAction.applyToBlock(caster.getEntityWorld(), correctedResult, new SpellInstanceTouch(caster.getEntityId(), caster.getPosition(), caster.getLookVec(), wrapper.getParentSpell()), child); // TODO: Clean
             } else if (traceResult.getType() == RayTraceResult.Type.ENTITY) {
                 EntityRayTraceResult correctedResult = (EntityRayTraceResult) traceResult;
-                return child.applyToEntity(caster.getEntityWorld(), correctedResult, new SpellInstanceTouch(caster.getEntityId(), caster.getPosition(), caster.getLookVec(), wrapper.getParentSpell()), wrapper);
+                return childAction.applyToEntity(caster.getEntityWorld(), correctedResult, new SpellInstanceTouch(caster.getEntityId(), caster.getPosition(), caster.getLookVec(), wrapper.getParentSpell()), child);
             }
             return false;
         });

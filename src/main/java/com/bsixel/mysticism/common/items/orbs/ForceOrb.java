@@ -65,7 +65,7 @@ public abstract class ForceOrb extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handUsed) {
         ItemStack stack = player.getHeldItem(handUsed);
         if (!player.getCooldownTracker().hasCooldown(this) && stack.hasTag()) {
-            player.getCapability(ManaCapability.mana_cap).ifPresent(playerMana -> {
+            player.getCapability(ManaCapability.mana_cap, null).ifPresent(playerMana -> {
                 double missingPlayerMana = playerMana.getMaxMana()-playerMana.getCurrentMana();
                 double manaToAdd = missingPlayerMana > 100 ? 100 : missingPlayerMana;
                 CompoundNBT mystTag = stack.getChildTag("mysticism");

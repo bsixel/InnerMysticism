@@ -40,7 +40,8 @@ public class SpellComponentInstance {
 
     public static SpellComponentInstance deserialize(Spell parentSpell, CompoundNBT nbt) {
         SpellComponentInstance instance = new SpellComponentInstance(parentSpell, SpellHelper.getRegisteredComponent(new ResourceLocation(nbt.getString("component"))));
-        nbt.getList("children", Constants.NBT.TAG_LIST).forEach(childNbt -> instance.addChild(deserialize(parentSpell, (CompoundNBT) childNbt)));
+        ListNBT childrenList = (ListNBT) nbt.get("children");
+        childrenList.forEach(childNbt -> instance.addChild(deserialize(parentSpell, (CompoundNBT) childNbt)));
         return instance;
     }
 
@@ -62,6 +63,14 @@ public class SpellComponentInstance {
 
     public List<ISpellEnhancement> getChildEnhancementComponents() {
         return this.children.stream().filter(child -> child.component instanceof ISpellEnhancement).map(child -> (ISpellEnhancement)child.getComponent()).collect(Collectors.toList());
+    }
+
+    public List<SpellComponentInstance> getWrappedChildActionComponents() {
+        return this.children.stream().filter(child -> child.component instanceof ISpellAction).collect(Collectors.toList());
+    }
+
+    public List<SpellComponentInstance> getWrappedChildEnhancementComponents() {
+        return this.children.stream().filter(child -> child.component instanceof ISpellEnhancement).collect(Collectors.toList());
     }
 
     public void addChild(SpellComponentInstance child) {

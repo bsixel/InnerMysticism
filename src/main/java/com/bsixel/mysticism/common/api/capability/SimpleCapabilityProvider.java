@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 // See https://github.com/Choonster-Minecraft-Mods/TestMod3/blob/1.16.x/src/main/java/choonster/testmod3/capability/SimpleCapabilityProvider.java for basis
-public class SimpleCapabilityProvider<HANDLER> implements ICapabilityProvider { // No longer SerializeableCapability or whatever, serializing will be handled by capability's Storage. This allows is to have only one generic provider
+public class SimpleCapabilityProvider<HANDLER> implements ICapabilityProvider { // No longer SerializeableCapability or whatever, serializing will be handled by capability's Storage. This allows us to have only one generic provider
 
     private final HANDLER handlerInstance;
     private final Capability<HANDLER> cap;

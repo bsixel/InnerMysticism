@@ -77,7 +77,7 @@ public class MysticismManaPacket { // TODO: Buffer xp updates. XP: They break 20
         ctx.get().enqueueWork(() -> { // TODO: This should only be processed on the clientside but make sure that's true maybe
             ClientPlayerEntity player = Minecraft.getInstance().player;
             if (player != null) { // Shouldn't ever be null but you never know
-                player.getCapability(ManaCapability.mana_cap).ifPresent(manaCap -> {
+                player.getCapability(ManaCapability.mana_cap, null).ifPresent(manaCap -> {
                     manaCap.setMysticismLevel(this.mystLevel);
                     manaCap.setMysticismXp(this.mystXp);
                     manaCap.setMaxMana(this.maxMana);

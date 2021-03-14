@@ -11,7 +11,7 @@ public class CommandRegistrar {
     public static void register(CommandDispatcher<CommandSource> dispatcher) { // TODO: Register other commands here
         LiteralCommandNode<CommandSource> cmdMysticism = dispatcher.register(Commands.literal(MysticismMod.MOD_ID)
                 .then(ManaCommand.register(dispatcher))
-                .then(SubManaCommand.register(dispatcher)));
+                .then(AddManaCommand.register(dispatcher)));
 
         // EX: We want /myst to also do the above
         dispatcher.register(Commands.literal("myst").redirect(cmdMysticism));
