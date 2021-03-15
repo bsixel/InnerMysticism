@@ -15,6 +15,7 @@ import com.bsixel.mysticism.init.registries.BlockRegistry;
 import com.bsixel.mysticism.init.registries.ItemRegistry;
 import com.bsixel.mysticism.init.registries.TileEntityRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -53,6 +54,10 @@ public class CommonProxy { // TODO: Maybe break out into separate initializers f
         CONTAINERS.register(lifecycleBus);
         ENTITIES.register(lifecycleBus);
         selfRegisterSpellComponents();
+    }
+
+    public PlayerEntity getPlayer() {
+        return null;
     }
 
     private void attachStartupLifecycleBus(IEventBus lifecycleBus) {

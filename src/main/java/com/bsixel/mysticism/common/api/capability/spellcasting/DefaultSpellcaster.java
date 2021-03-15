@@ -68,6 +68,18 @@ public class DefaultSpellcaster implements ISpellcaster {
     }
 
     @Override
+    public int changeSpellslot(int amount) {
+        for (int i = 0; i < Math.abs(amount); i++) { // Don't @ me I know it's weird but it guarantees we handle the cases the same either way
+            if (amount >= 0) {
+                this.incrementSpellslot();
+            } else {
+                this.decrementSpellslot();
+            }
+        }
+        return currentSpellIndex;
+    }
+
+    @Override
     public int getCurrentSpellIndex() {
         return currentSpellIndex;
     }

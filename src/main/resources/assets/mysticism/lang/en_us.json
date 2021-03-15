@@ -30,7 +30,7 @@
   "tooltip.mysticism.shift_for_more": "Hold \u00A7eShift \u00A77\u00A7ffor more information",
   "spell.component.dig.name": "Dig",
   "spell.component.dig.description": "Break things! Dig em! Stick them in a hole! Wait, what?",
-  "spell.component.touch.name": "Break things! Dig em! Stick them in a hole! Wait, what?",
+  "spell.component.touch.name": "Touch",
   "spell.component.touch.description": "Really more like melee, but who's tracking?",
   "spell.component.power.name": "Power",
   "spell.component.power.description": "Enhances the overall power of a component. Can be reversed with a Reversal enhancement"

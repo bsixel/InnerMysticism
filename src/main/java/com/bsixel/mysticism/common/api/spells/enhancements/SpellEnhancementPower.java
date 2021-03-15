@@ -54,7 +54,7 @@ public class SpellEnhancementPower extends BaseSpellComponent implements ISpellE
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(Items.DIAMOND_PICKAXE);
+        return new ItemStack(Items.DIAMOND);
     }
 
     @Override

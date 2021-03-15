@@ -15,9 +15,10 @@ import javax.annotation.Nonnull;
 public class ScreenBase extends Screen { // TODO: I'm sure we'll need something in here
 
 //    protected ResourceLocation large_background = new ResourceLocation(MysticismMod.MOD_ID, "textures/gui/generic_background_1024x1024.png");
-    protected ResourceLocation wide_background = new ResourceLocation(MysticismMod.MOD_ID, "textures/gui/generic_background_256x256.png");
+    protected ResourceLocation wide_background = new ResourceLocation(MysticismMod.MOD_ID, "textures/gui/generic_background_248_186.png");
     protected ResourceLocation tall_background = new ResourceLocation(MysticismMod.MOD_ID, "textures/gui/generic_background_tall_256x256.png");
     protected ResourceLocation square_background = new ResourceLocation(MysticismMod.MOD_ID, "textures/gui/generic_background_square_256x256.png");
+    protected ResourceLocation gui_pieces = new ResourceLocation(MysticismMod.MOD_ID, "textures/gui/gui-pieces.png");
 
     protected int guiLeft = 0; // Screens are weird, start top left, like reading a page I guess
     protected int guiTop = 0;

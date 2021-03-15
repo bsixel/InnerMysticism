@@ -6,7 +6,7 @@ import com.bsixel.mysticism.common.api.capability.spellcasting.ISpellcaster;
 import com.bsixel.mysticism.common.api.capability.spellcasting.SpellcasterCapability;
 import com.bsixel.mysticism.common.networking.NetworkManager;
 import com.bsixel.mysticism.common.networking.packets.MysticismManaPacket;
-import com.bsixel.mysticism.common.networking.packets.MysticismSpellcasterPacket;
+import com.bsixel.mysticism.common.networking.packets.MysticismSpellcasterPacketFromServer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.TickEvent;
@@ -25,7 +25,7 @@ public class PlayerEventHandler { // NOTE: These should all be serverside
     }
 
     public static void updatePlayerSpellcasting(PlayerEntity player, ISpellcaster spellcasterData) {
-        NetworkManager.channel.sendToSpecPlayer(player, new MysticismSpellcasterPacket(spellcasterData));
+        NetworkManager.channel.sendToSpecPlayer(player, new MysticismSpellcasterPacketFromServer(spellcasterData));
     }
 
     public static void updatePlayerSpellcasting(PlayerEntity player) {

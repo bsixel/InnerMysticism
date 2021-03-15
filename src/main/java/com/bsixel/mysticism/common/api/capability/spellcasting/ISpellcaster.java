@@ -14,6 +14,7 @@ public interface ISpellcaster {
     void setCurrentSpellIndex(int idx);
     int incrementSpellslot();
     int decrementSpellslot();
+    int changeSpellslot(int amount);
     int getCurrentSpellIndex();
 
     default Spell getCurrentSpell() {

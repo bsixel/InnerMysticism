@@ -1,7 +1,9 @@
 package com.bsixel.mysticism.common.networking.packets;
 
+import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.common.api.capability.spellcasting.SpellcasterCapability;
 import com.bsixel.mysticism.common.events.PlayerEventHandler;
+import com.bsixel.mysticism.init.CommonProxy;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Util;
@@ -19,7 +21,7 @@ public class MysticismClientChangedSpellPacket {
         this.slotChange = buffer.readInt();
     }
 
-    public MysticismClientChangedSpellPacket() {
+    public MysticismClientChangedSpellPacket() { // Default: Spell slot increased once clientside
         this(1);
     }
 
@@ -38,11 +40,10 @@ public class MysticismClientChangedSpellPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
 
         ctx.get().enqueueWork(() -> { // TODO: This should always be received on the server side.
-            // For now to test we're just going to heal the player
             ServerPlayerEntity player = ctx.get().getSender();
             if (player != null) { // Shouldn't ever be null but you never know
                 player.getCapability(SpellcasterCapability.spellcaster_cap, null).ifPresent(playerCasting -> {
-                    playerCasting.incrementSpellslot();
+                    playerCasting.changeSpellslot(this.slotChange);
                     PlayerEventHandler.updatePlayerSpellcasting(player);
                     player.sendMessage(new StringTextComponent("Switched to spell: " + playerCasting.getCurrentSpell().getName()).mergeStyle(TextFormatting.BLUE), Util.DUMMY_UUID);
                 });

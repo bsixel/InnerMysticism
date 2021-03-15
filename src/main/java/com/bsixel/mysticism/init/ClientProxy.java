@@ -4,6 +4,8 @@ import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.client.gui.overlays.OverlayHandler;
 import com.bsixel.mysticism.client.keybindings.KeyHandler;
 import com.bsixel.mysticism.client.keybindings.Keybindings;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -22,6 +24,11 @@ public class ClientProxy extends CommonProxy { // TODO: Register textures etc
         // Register clientside-only things: textures, rendering, GUIs etc
         this.attachStartupLifecycleBus(lifecycleBus);
         this.attachNormalEventBus(ingameBus);
+    }
+
+    @Override
+    public PlayerEntity getPlayer() {
+        return Minecraft.getInstance().player;
     }
 
     private void attachStartupLifecycleBus(IEventBus lifecycleBus) {
