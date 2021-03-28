@@ -9,7 +9,8 @@ public abstract class BaseSpellComponent implements ISpellComponent {
 
     @Override
     public boolean isChildAllowed(Class<? extends ISpellComponent> childPart) {
-        return allowedChildren.contains(childPart); // TODO: We might want an easy way of adding "all" or groups or something
+//        return allowedChildren.contains(childPart); // TODO: We might want an easy way of adding "all" or groups or something
+        return true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.bsixel.mysticism.client.gui.screens;
 
 import com.bsixel.mysticism.MysticismMod;
+import com.bsixel.mysticism.client.gui.GuiHelper;
 import com.bsixel.mysticism.client.gui.widgets.AbilityButton;
 import com.bsixel.mysticism.common.api.ability.Ability;
 import com.bsixel.mysticism.common.api.capability.mana.Force;
@@ -120,7 +121,7 @@ public class ForceAbilityTabGui extends ScreenBase {
     @Override
     public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(wide_background);
+        this.minecraft.getTextureManager().bindTexture(GuiHelper.wide_background);
         /* matrixStack, startLeftPos, startRightPos, zIndex, textureSheetStartX, textureSheetStartY, textureSizeXCrop, textureSizeYCrop, textureSizeXScale, textureSizeYScale */
         blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.sizeX, this.sizeY);
 

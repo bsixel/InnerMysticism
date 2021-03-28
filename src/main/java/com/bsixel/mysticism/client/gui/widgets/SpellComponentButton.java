@@ -5,14 +5,12 @@ import com.bsixel.mysticism.client.gui.screens.SpellcraftingGui;
 import com.bsixel.mysticism.common.api.math.tree.IPositionable;
 import com.bsixel.mysticism.common.api.spells.SpellComponentInstance;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.util.text.ITextComponent;
-import org.lwjgl.glfw.GLFW;
+import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SpellComponentButton extends Button implements IPositionable {
 
@@ -20,40 +18,40 @@ public class SpellComponentButton extends Button implements IPositionable {
     private final SpellcraftingGui parentScreen;
     private final ItemRenderer itemRenderer;
     private final SpellComponentInstance wrapper;
-    private static final int buttonWidth = 16;
-    private static final int buttonHeight = 16;
+    private static final int buttonWidth = 24;
+    private static final int buttonHeight = 24;
 
-    public SpellComponentButton(int x, int y, @Nonnull SpellComponentInstance wrapper, @Nonnull SpellcraftingGui parentScreen, @Nonnull ItemRenderer itemRenderer, ITooltip tooltip) {
-        super(x, y, buttonWidth, buttonHeight, wrapper.getComponent().getName(), b -> {}, tooltip);
+    public SpellComponentButton(int x, int y, @Nonnull SpellComponentInstance wrapper, @Nonnull SpellcraftingGui parentScreen, @Nonnull ItemRenderer itemRenderer, IPressable pressed, ITooltip tooltip) {
+        super(x, y, buttonWidth, buttonHeight, new StringTextComponent(""), pressed, tooltip);
         this.wrapper = wrapper;
         this.parentScreen = parentScreen;
         this.itemRenderer = itemRenderer;
     }
 
     @Override
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
-            this.itemRenderer.renderItemIntoGUI(this.wrapper.getComponent().getIcon(), this.x, this.y);
-            if (this.isHovered()) {
-                this.renderToolTip(matrixStack, mouseX, mouseY);
+            Minecraft.getInstance().getTextureManager().bindTexture(GuiHelper.gui_pieces);
+            this.parentScreen.enableScissorToMainArea();
+            if (this.parentScreen.getSelectedComponent() == this.wrapper) { // Currently selected component
+                if (this.getWrapper().getComponent() == null) { // This is a noncomplete wrapper, it doesn't have an actual component
+                    blit(matrixStack, this.x, this.y, 69, 102, 24, 24);
+                } else {
+                    blit(matrixStack, this.x, this.y, 69, 52, 24, 24);
+                }
+            } else { // Not selected/active
+                if (this.getWrapper().getComponent() == null) { // This is a noncomplete wrapper, it doesn't have an actual component
+                    blit(matrixStack, this.x, this.y, 69, 127, 24, 24);
+                } else {
+                    blit(matrixStack, this.x, this.y, 69, 77, 24, 24);
+                }
             }
+            if (this.wrapper.getComponent() != null) {
+//                GL11.glDisable(GL11.GL_LIGHTING); // TODO MAYBE
+                this.itemRenderer.renderItemIntoGUI(this.wrapper.getComponent().getIcon(), this.x + 4, this.y + 4);
+            }
+            this.parentScreen.disableScissor();
         }
-    }
-
-    @Override
-    public void onPress() { // Button clicked
-//        SpellComponentButton newButton = ;
-//        newButton = new SpellComponentButton(0, 0, buttonWidth, buttonHeight, component.getName(), , this.parentScreen, this.itemRenderer,
-//                (p_onTooltip_1_, p_onTooltip_2_, p_onTooltip_3_, p_onTooltip_4_) -> this.parentScreen.renderTooltip(p_onTooltip_2_, Minecraft.getInstance().fontRenderer.trimStringToWidth(new TranslationTextComponent(newAbility.getName().getString() + ": " + newAbility.getDescription().getString() + " Parent: " + this.ability.getName().getString()), Math.max(this.width / 2 - 43, 170)), p_onTooltip_3_, p_onTooltip_4_));
-//        this.parentScreen.addSpellComponentButton(this, newButton);
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) { // Key pressed
-        if (keyCode == GLFW.GLFW_KEY_BACKSPACE || keyCode == GLFW.GLFW_KEY_DELETE) { // Delete this ability
-            this.parentScreen.removeComponent(this);
-        }
-        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     public void setPos(int x, int y) {

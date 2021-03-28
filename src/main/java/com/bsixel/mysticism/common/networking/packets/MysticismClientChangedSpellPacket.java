@@ -43,9 +43,11 @@ public class MysticismClientChangedSpellPacket {
             ServerPlayerEntity player = ctx.get().getSender();
             if (player != null) { // Shouldn't ever be null but you never know
                 player.getCapability(SpellcasterCapability.spellcaster_cap, null).ifPresent(playerCasting -> {
-                    playerCasting.changeSpellslot(this.slotChange);
-                    PlayerEventHandler.updatePlayerSpellcasting(player);
-                    player.sendMessage(new StringTextComponent("Switched to spell: " + playerCasting.getCurrentSpell().getName()).mergeStyle(TextFormatting.BLUE), Util.DUMMY_UUID);
+                    if (playerCasting.getKnownSpells().size() > 0) {
+                        playerCasting.changeSpellslot(this.slotChange);
+                        PlayerEventHandler.updatePlayerSpellcasting(player);
+                        player.sendMessage(new StringTextComponent("Switched to spell: " + playerCasting.getCurrentSpell().getName()).mergeStyle(TextFormatting.BLUE), Util.DUMMY_UUID);
+                    }
                 });
             }
         });

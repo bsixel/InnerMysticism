@@ -1,15 +1,8 @@
 package com.bsixel.mysticism.common.api.capability.spellcasting;
 
-import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.common.api.spells.Spell;
-import com.bsixel.mysticism.common.api.spells.SpellComponentInstance;
-import com.bsixel.mysticism.common.api.spells.SpellHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +14,6 @@ public class DefaultSpellcaster implements ISpellcaster {
 
     public DefaultSpellcaster() {
         knownSpells.clear();
-        this.addSpell(buildTestSpell1());
-        this.addSpell(buildTestSpell2());
     }
 
     @Override
@@ -89,28 +80,6 @@ public class DefaultSpellcaster implements ISpellcaster {
         getKnownSpells().add(spell);
         setCurrentSpellIndex(getKnownSpells().size()-1);
         return getCurrentSpellIndex();
-    }
-
-    private static Spell buildTestSpell1() { // Bad example, most of the time the resource locations won't be newly created
-        Spell spell = new Spell("", new BlockPos(0,67,0), "minecraft:overworld");
-        spell.root = new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.touch")));
-        spell.root.getChildren().add(new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.dig"))));
-        spell.setName("Basic Dig");
-        spell.setIcon(new ItemStack(Items.IRON_PICKAXE));
-        return spell;
-    }
-
-    private static Spell buildTestSpell2() { // Bad example, most of the time the resource locations won't be newly created
-        Spell spell = new Spell("", new BlockPos(0,67,0), "minecraft:overworld");
-        spell.root = new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.touch")));
-        SpellComponentInstance dig = new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.dig")));
-        spell.root.getChildren().add(dig);
-        dig.addChild(new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.power"))));
-        dig.addChild(new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.power"))));
-        dig.addChild(new SpellComponentInstance(spell, SpellHelper.getRegisteredComponent(new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.power"))));
-        spell.setName("Bigger Badder Dig");
-        spell.setIcon(new ItemStack(Items.DIAMOND_PICKAXE));
-        return spell;
     }
 
 }

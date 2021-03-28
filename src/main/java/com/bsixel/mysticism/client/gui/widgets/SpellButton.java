@@ -44,10 +44,13 @@ public class SpellButton extends Button {
     @Override
     public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible && this.spellSlot < this.parentScreen.getNumSpells()) {
-            this.itemRenderer.renderItemIntoGUI(this.getSpell().getIcon(), this.x + 4, this.y + 4);
-            if (this.isHovered()) {
-                this.renderToolTip(matrixStack, mouseX, mouseY);
+            Minecraft.getInstance().getTextureManager().bindTexture(GuiHelper.gui_pieces);
+            if (this.spellSlot == this.parentScreen.getActiveSpellIndex()) { // Currently selected spell, render a border
+                blit(matrixStack, this.x, this.y, 69, 52, 24, 24);
+            } else {
+                blit(matrixStack, this.x, this.y, 69, 77, 24, 24);
             }
+            this.itemRenderer.renderItemIntoGUI(this.getSpell().getIcon(), this.x + 3, this.y + 4);
         }
     }
 

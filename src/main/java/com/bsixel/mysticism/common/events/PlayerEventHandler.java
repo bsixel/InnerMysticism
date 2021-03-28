@@ -48,8 +48,10 @@ public class PlayerEventHandler { // NOTE: These should all be serverside
             return;
         }
 
-        int manaRegenRate = 2;
         event.player.getCapability(ManaCapability.mana_cap, null).ifPresent(playerMana -> {
+
+            double manaRegenRate = playerMana.getMaxMana() / 200; // Based on percent of max mana
+
             if (playerMana.isRefillable() && (playerMana.getManaLastUsed() + 1300 < System.currentTimeMillis())) { // If mana is full obviously we shouldn't regen
                 playerMana.addMana(manaRegenRate);
                 updatePlayerMana(event.player, playerMana);

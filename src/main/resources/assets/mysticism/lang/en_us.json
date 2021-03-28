@@ -28,6 +28,7 @@
   "item.mysticism.balance_rod": "Balance Rod",
   "tooltip.mysticism.force_crystal_tooltip": "A small shard of the Force of %s",
   "tooltip.mysticism.shift_for_more": "Hold \u00A7eShift \u00A77\u00A7ffor more information",
+  "gui.spellcrafting.name": "Spellcrafting",
   "spell.component.dig.name": "Dig",
   "spell.component.dig.description": "Break things! Dig em! Stick them in a hole! Wait, what?",
   "spell.component.touch.name": "Touch",

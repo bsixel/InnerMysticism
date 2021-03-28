@@ -36,17 +36,20 @@ public class MysticismCastSpellPacket {
             if (player != null) { // Shouldn't ever be null but you never know
                 player.getCapability(ManaCapability.mana_cap, null).ifPresent(playerMana -> {
                     player.getCapability(SpellcasterCapability.spellcaster_cap, null).ifPresent(playerCasting -> {
-                        double spellCost = playerCasting.getCurrentSpell().getCost();
-                        if (playerMana.getCurrentMana() >= spellCost || player.isCreative()) { // Player can cast whatever they want in creative
-                            player.heal(10f); // TODO: Remove, useful for testing rn
-                            player.getFoodStats().setFoodLevel(20);
-                            // TODO: Expend the spell's mana
-                            playerMana.addMana(player.isCreative() ? 0 : -spellCost); // Don't expend mana in creative
-                            playerCasting.getCurrentSpell().cast(player);
-                            playerMana.setManaLastUsed(); // Reset regen cooldown
-                            PlayerEventHandler.updatePlayerMana(player, playerMana);
-                        } else {
-                            // TODO: Something interesting if they try to expend mana they don't have
+                        if (playerCasting.getKnownSpells().size() > 0) {
+                            if (playerCasting.getCurrentSpellIndex() < 0 || playerCasting.getCurrentSpellIndex() >= playerCasting.getKnownSpells().size()) { // They don't have a valid index, just default it to zero
+                                playerCasting.incrementSpellslot();
+                                PlayerEventHandler.updatePlayerSpellcasting(player);
+                            }
+                            double spellCost = playerCasting.getCurrentSpell().getCost();
+                            if (playerMana.getCurrentMana() >= spellCost || player.isCreative()) { // Player can cast whatever they want in creative
+                                playerMana.addMana(player.isCreative() ? 0 : -spellCost); // Don't expend mana in creative
+                                playerCasting.getCurrentSpell().cast(player);
+                                playerMana.setManaLastUsed(); // Reset regen cooldown
+                                PlayerEventHandler.updatePlayerMana(player, playerMana);
+                            } else {
+                                // TODO: Something interesting if they try to expend mana they don't have, maybe cause damage? Random effect? Probably affected by player's abilities
+                            }
                         }
                     });
                 });

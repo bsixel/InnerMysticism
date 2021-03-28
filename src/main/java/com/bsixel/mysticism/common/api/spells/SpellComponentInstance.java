@@ -5,7 +5,6 @@ import com.bsixel.mysticism.common.api.spells.enhancements.ISpellEnhancement;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ public class SpellComponentInstance {
 
     private ISpellComponent component;
     private List<SpellComponentInstance> children = new ArrayList<>();
-    private Spell parentSpell;
+    private final Spell parentSpell;
 
     public SpellComponentInstance(Spell parentSpell, ISpellComponent component) {
         this.parentSpell = parentSpell;
@@ -47,6 +46,10 @@ public class SpellComponentInstance {
 
     public ISpellComponent getComponent() {
         return this.component;
+    }
+
+    public void setComponent(ISpellComponent component) {
+        this.component = component;
     }
 
     public List<SpellComponentInstance> getChildren() {
