@@ -1,7 +1,7 @@
 package com.bsixel.mysticism.common.api.spells.enhancements;
 
 import com.bsixel.mysticism.common.api.spells.ISpellComponent;
-import com.bsixel.mysticism.common.api.spells.instances.ISpellInstance;
+import com.bsixel.mysticism.common.api.spells.instances.SpellInstance;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 
@@ -15,17 +15,17 @@ public interface ISpellEnhancement extends ISpellComponent { // Radius, duration
         return 1;
     }
 
-    default void modify(Class<ISpellComponent> actionToEnhance, ISpellInstance instance) {} // Honestly not sure what you'd ever use this one for, but just in case we need it
+    default void modify(Class<ISpellComponent> actionToEnhance, SpellInstance instance) {} // Honestly not sure what you'd ever use this one for, but just in case we need it
 
-    default ItemStack modifyAndReturn(Class<? extends ISpellComponent> actionToEnhance, ISpellInstance instance, ItemStack stack) {
+    default ItemStack modifyAndReturn(Class<? extends ISpellComponent> actionToEnhance, SpellInstance instance, ItemStack stack) {
         return stack;
     }
 
-    default double modifyAndReturn(Class<? extends ISpellComponent> actionToEnhance, ISpellInstance instance, double value) {
+    default double modifyAndReturn(Class<? extends ISpellComponent> actionToEnhance, SpellInstance instance, double value) {
         return value;
     }
 
-    default Entity modifyAndReturn(Class<? extends ISpellComponent> actionToEnhance, ISpellInstance instance, Entity target) {
+    default Entity modifyAndReturn(Class<? extends ISpellComponent> actionToEnhance, SpellInstance instance, Entity target) {
         return target;
     }
 

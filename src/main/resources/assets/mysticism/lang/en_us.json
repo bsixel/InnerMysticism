@@ -34,5 +34,7 @@
   "spell.component.touch.name": "Touch",
   "spell.component.touch.description": "Really more like melee, but who's tracking?",
   "spell.component.power.name": "Power",
-  "spell.component.power.description": "Enhances the overall power of a component. Can be reversed with a Reversal enhancement"
+  "spell.component.power.description": "Enhances the overall power of a component. Can be reversed with a Reversal enhancement",
+  "spell.component.projectile.name": "Projectile",
+  "spell.component.projectile.description": "Pew pew!"
 }

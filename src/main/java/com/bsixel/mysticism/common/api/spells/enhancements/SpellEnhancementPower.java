@@ -4,7 +4,7 @@ import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.common.api.capability.mana.Force;
 import com.bsixel.mysticism.common.api.spells.BaseSpellComponent;
 import com.bsixel.mysticism.common.api.spells.ISpellComponent;
-import com.bsixel.mysticism.common.api.spells.instances.ISpellInstance;
+import com.bsixel.mysticism.common.api.spells.instances.SpellInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -78,9 +78,9 @@ public class SpellEnhancementPower extends BaseSpellComponent implements ISpellE
     }
 
     @Override
-    public double modifyAndReturn(Class<? extends ISpellComponent> actionToEnhance, ISpellInstance instance, double value) {
+    public double modifyAndReturn(Class<? extends ISpellComponent> actionToEnhance, SpellInstance instance, double value) {
         double baseModifierForClass = powerMapping.getOrDefault(actionToEnhance, 1.2);
         // TODO: Look for opposite modifier
-        return baseModifierForClass; // TODO: Figure out how to do this. Will almost definitely depend on class. Default to 1.2
+        return baseModifierForClass;
     }
 }

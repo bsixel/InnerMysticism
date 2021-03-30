@@ -7,7 +7,7 @@ import com.bsixel.mysticism.common.api.spells.SpellComponentInstance;
 import com.bsixel.mysticism.common.api.spells.SpellHelper;
 import com.bsixel.mysticism.common.api.spells.enhancements.ISpellEnhancement;
 import com.bsixel.mysticism.common.api.spells.enhancements.SpellEnhancementPower;
-import com.bsixel.mysticism.common.api.spells.instances.ISpellInstance;
+import com.bsixel.mysticism.common.api.spells.instances.SpellInstance;
 import com.bsixel.mysticism.common.utilities.ItemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -35,12 +35,12 @@ public class DigAction extends BaseSpellComponent implements ISpellAction { // T
     private static final ResourceLocation location = new ResourceLocation(MysticismMod.MOD_ID, "spellcomponent.dig");
 
     @Override
-    public boolean applyToEntity(World world, EntityRayTraceResult trace, ISpellInstance spellInstance, SpellComponentInstance wrapper) {
+    public boolean applyToEntity(World world, EntityRayTraceResult trace, SpellInstance spellInstance, SpellComponentInstance wrapper) {
         return false; // This can't be applied to entities
     }
 
     @Override // TODO / NOTE: This whole thing should be called for each block; We're not handling AoE here. I don't think... The cast type itself will handle multi-hits.
-    public boolean applyToBlock(World world, @Nonnull BlockRayTraceResult trace, ISpellInstance spellInstance, SpellComponentInstance wrapper) {
+    public boolean applyToBlock(World world, @Nonnull BlockRayTraceResult trace, SpellInstance spellInstance, SpellComponentInstance wrapper) {
         if (trace.getType() == RayTraceResult.Type.BLOCK) {
             LivingEntity caster = (LivingEntity) world.getEntityByID(spellInstance.getCasterId());
             BlockState initialTargetState = world.getBlockState(trace.getPos()); // Ignore this warning, block trace result should always be non null
@@ -52,12 +52,12 @@ public class DigAction extends BaseSpellComponent implements ISpellAction { // T
             miningLevel = Math.max(miningLevel, mockBreakerStack.getHarvestLevel(ToolType.PICKAXE, null, null));
 
             // TODO: Maybe we register with an enhancement what it should do for our class???
-            // TODO: Apply enhancements to item to apply enchantments or whatever. Also figure out how to autosmelt
+            // TODO: Apply enhancements to item to apply enchantments or whatever. Also figure out how to autosmelt:
             // ex: https://github.com/MinecraftForge/MinecraftForge/blob/813f3d630de31b3f0ce20955ff6e6c335bc0c0cd/src/test/java/net/minecraftforge/debug/gameplay/loot/GlobalLootModifiersTest.java#L146
             for (ISpellEnhancement child : wrapper.getChildEnhancementComponents()) {
                 mockBreakerStack = child.modifyAndReturn(DigAction.class, spellInstance, mockBreakerStack); // Stuff like a fortune enhancement applying fortune to the itemstack
             }
-
+            // TODO: Figure out if we're dropping things from chests etc on break cause obviously we should
             if (initialTargetState.getBlockHardness(world, trace.getPos()) != -1 && miningLevel >= initialTargetState.getHarvestLevel() && SpellHelper.canEntityBreakPos(world, caster, trace.getPos())) { // If we're clientside or the block is... safetied by forge or spawn or something, we won't break it
                 // If we have silk touch or fortune, it'll be handled on their end - altering/returning a different itemstack. Maybe? Ugh I have no idea how drops work in this version
                 List<ItemStack> initialDrops = Block.getDrops(initialTargetState, (ServerWorld) world, trace.getPos(), tile, caster, mockBreakerStack);

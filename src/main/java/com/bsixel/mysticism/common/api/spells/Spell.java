@@ -1,6 +1,7 @@
 package com.bsixel.mysticism.common.api.spells;
 
 import com.bsixel.mysticism.common.api.spells.casttypes.ISpellCastType;
+import com.bsixel.mysticism.common.api.spells.instances.SpellInstance;
 import javafx.scene.paint.Color;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -9,6 +10,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.FakePlayerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -80,14 +83,14 @@ public class Spell { // NOTE: This hold the state of a spell, but doesn't repres
     // Normal casters like players and justiciars/enforcers
     public void cast(@Nonnull LivingEntity caster) {
         if (root != null) {
-            ((ISpellCastType)root.getComponent()).cast(caster, root);
+            ((ISpellCastType)root.getComponent()).cast(caster, new SpellInstance(caster, this), root);
         }
     }
 
     // Artificial caster. Not sure what all this will include but probably some sorta block that casts. Magic traps? Might be needed for anchors? I don't think so.
-    public void cast(@Nonnull BlockPos sourcePos, @Nonnull Vector3d lookVector) {
+    public void cast(World world, @Nonnull BlockPos sourcePos, @Nonnull Vector3d lookVector) {
         if (root != null) {
-            ((ISpellCastType)root.getComponent()).cast(sourcePos, lookVector, root);
+            ((ISpellCastType)root.getComponent()).cast(sourcePos, lookVector, new SpellInstance(FakePlayerFactory.getMinecraft((ServerWorld) world), this), root);
         }
     }
 

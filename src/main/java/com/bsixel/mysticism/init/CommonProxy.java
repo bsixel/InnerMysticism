@@ -5,6 +5,7 @@ import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
 import com.bsixel.mysticism.common.api.capability.spellcasting.SpellcasterCapability;
 import com.bsixel.mysticism.common.api.spells.SpellHelper;
 import com.bsixel.mysticism.common.api.spells.actions.DigAction;
+import com.bsixel.mysticism.common.api.spells.casttypes.SpellCastTypeProjectile;
 import com.bsixel.mysticism.common.api.spells.casttypes.SpellCastTypeTouch;
 import com.bsixel.mysticism.common.api.spells.enhancements.SpellEnhancementPower;
 import com.bsixel.mysticism.common.commands.CommandRegistrar;
@@ -75,6 +76,7 @@ public class CommonProxy { // TODO: Maybe break out into separate initializers f
 
     private void selfRegisterSpellComponents() {
         SpellHelper.registerSpellComponent(new SpellCastTypeTouch()); // Or whatever TODO: Actually register any new ones we make here
+        SpellHelper.registerSpellComponent(new SpellCastTypeProjectile());
         SpellHelper.registerSpellComponent(new DigAction());
         SpellHelper.registerSpellComponent(new SpellEnhancementPower());
     }
