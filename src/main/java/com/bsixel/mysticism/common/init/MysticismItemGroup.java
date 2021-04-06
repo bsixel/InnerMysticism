@@ -1,8 +1,7 @@
-package com.bsixel.mysticism.init;
+package com.bsixel.mysticism.common.init;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.init.registries.BlockRegistry;
-import com.bsixel.mysticism.init.registries.ItemRegistry;
+import com.bsixel.mysticism.common.init.registries.ItemRegistry;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 

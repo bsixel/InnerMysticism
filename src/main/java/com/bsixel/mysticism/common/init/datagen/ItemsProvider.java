@@ -1,7 +1,7 @@
-package com.bsixel.mysticism.init.datagen;
+package com.bsixel.mysticism.common.init.datagen;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.init.registries.ItemRegistry;
+import com.bsixel.mysticism.common.init.registries.ItemRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;

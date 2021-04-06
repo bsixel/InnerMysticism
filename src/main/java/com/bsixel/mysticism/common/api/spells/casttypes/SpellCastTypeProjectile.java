@@ -5,10 +5,7 @@ import com.bsixel.mysticism.common.api.capability.mana.Force;
 import com.bsixel.mysticism.common.api.spells.BaseSpellComponent;
 import com.bsixel.mysticism.common.api.spells.SpellComponentInstance;
 import com.bsixel.mysticism.common.api.spells.instances.SpellInstance;
-import com.bsixel.mysticism.common.api.spells.instances.SpellProjectileEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ArrowItem;
+import com.bsixel.mysticism.common.entities.projectiles.SpellProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -66,15 +63,11 @@ public class SpellCastTypeProjectile extends BaseSpellComponent implements ISpel
         return false;
     }
 
-    private float velocity() {
-        return 1F;
-    }
-
     @Override
-    public boolean cast(LivingEntity caster, SpellInstance spellInstance, SpellComponentInstance wrapper) {
-        SpellProjectileEntity projectileEntity = new SpellProjectileEntity(caster.world, caster, spellInstance, wrapper);
-        projectileEntity.func_234612_a_(caster, caster.rotationPitch, caster.rotationYaw, 0.0F, velocity() * 3.0F, 1.0F);
-        caster.world.addEntity(projectileEntity);
+    public boolean cast(SpellInstance spellInstance, SpellComponentInstance wrapper) {
+        SpellProjectileEntity projectileEntity = new SpellProjectileEntity(spellInstance, wrapper);
+        projectileEntity.launch();
+        spellInstance.getCaster().world.addEntity(projectileEntity);
         return false;
     }
 

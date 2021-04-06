@@ -128,7 +128,7 @@ dependencies {
     })
 
     // Gecko Lib for animations
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.8')
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.17')
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

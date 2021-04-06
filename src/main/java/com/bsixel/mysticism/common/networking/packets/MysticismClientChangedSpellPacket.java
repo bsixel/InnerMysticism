@@ -1,9 +1,7 @@
 package com.bsixel.mysticism.common.networking.packets;
 
-import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.common.api.capability.spellcasting.SpellcasterCapability;
 import com.bsixel.mysticism.common.events.PlayerEventHandler;
-import com.bsixel.mysticism.init.CommonProxy;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Util;

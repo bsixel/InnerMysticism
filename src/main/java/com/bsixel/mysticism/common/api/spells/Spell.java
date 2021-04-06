@@ -83,7 +83,7 @@ public class Spell { // NOTE: This hold the state of a spell, but doesn't repres
     // Normal casters like players and justiciars/enforcers
     public void cast(@Nonnull LivingEntity caster) {
         if (root != null) {
-            ((ISpellCastType)root.getComponent()).cast(caster, new SpellInstance(caster, this), root);
+            ((ISpellCastType)root.getComponent()).cast(new SpellInstance(caster, this), root);
         }
     }
 

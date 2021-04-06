@@ -1,4 +1,4 @@
-package com.bsixel.mysticism.init;
+package com.bsixel.mysticism.common.init;
 
 import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
@@ -12,10 +12,10 @@ import com.bsixel.mysticism.common.commands.CommandRegistrar;
 import com.bsixel.mysticism.common.events.PlayerEventHandler;
 import com.bsixel.mysticism.common.networking.NetworkManager;
 import com.bsixel.mysticism.common.world.OreGen;
-import com.bsixel.mysticism.init.registries.BlockRegistry;
-import com.bsixel.mysticism.init.registries.ItemRegistry;
-import com.bsixel.mysticism.init.registries.TileEntityRegistry;
-import net.minecraft.entity.EntityType;
+import com.bsixel.mysticism.common.init.registries.BlockRegistry;
+import com.bsixel.mysticism.common.init.registries.EntityRegistry;
+import com.bsixel.mysticism.common.init.registries.ItemRegistry;
+import com.bsixel.mysticism.common.init.registries.TileEntityRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -39,7 +39,6 @@ public class CommonProxy { // TODO: Maybe break out into separate initializers f
 
     // Register common things here - blocks, biomes, items, entities etc
     private static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, MysticismMod.MOD_ID);
-    private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MysticismMod.MOD_ID);
 //    private static final DeferredRegister<> DIMENSIONS = DeferredRegister.create(ForgeRegistries.BLOCKS, MysticismMod.MOD_ID); TODO: Do we want a neat dimension? Probably someday, no rush
 
     public void init(IEventBus lifecycleBus, IEventBus ingameBus) {
@@ -51,9 +50,9 @@ public class CommonProxy { // TODO: Maybe break out into separate initializers f
         ItemRegistry.init(lifecycleBus);
         BlockRegistry.init(lifecycleBus);
         TileEntityRegistry.init(lifecycleBus);
+        EntityRegistry.init(lifecycleBus);
         // TODO: Move what's left to their own
         CONTAINERS.register(lifecycleBus);
-        ENTITIES.register(lifecycleBus);
         selfRegisterSpellComponents();
     }
 

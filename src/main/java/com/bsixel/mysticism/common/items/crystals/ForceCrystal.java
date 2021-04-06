@@ -1,7 +1,7 @@
 package com.bsixel.mysticism.common.items.crystals;
 
 import com.bsixel.mysticism.common.api.capability.mana.Force;
-import com.bsixel.mysticism.init.registries.ItemRegistry;
+import com.bsixel.mysticism.common.init.registries.ItemRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

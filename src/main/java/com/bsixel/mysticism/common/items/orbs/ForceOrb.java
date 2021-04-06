@@ -2,7 +2,7 @@ package com.bsixel.mysticism.common.items.orbs;
 
 import com.bsixel.mysticism.common.api.capability.mana.Force;
 import com.bsixel.mysticism.common.api.capability.mana.ManaCapability;
-import com.bsixel.mysticism.init.registries.ItemRegistry;
+import com.bsixel.mysticism.common.init.registries.ItemRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.client.util.InputMappings;

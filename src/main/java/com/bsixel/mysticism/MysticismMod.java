@@ -1,8 +1,8 @@
 package com.bsixel.mysticism;
 
-import com.bsixel.mysticism.init.ClientProxy;
-import com.bsixel.mysticism.init.CommonProxy;
-import com.bsixel.mysticism.init.MysticismItemGroup;
+import com.bsixel.mysticism.client.init.ClientProxy;
+import com.bsixel.mysticism.common.init.CommonProxy;
+import com.bsixel.mysticism.common.init.MysticismItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;

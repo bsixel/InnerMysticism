@@ -1,9 +1,12 @@
-package com.bsixel.mysticism.init;
+package com.bsixel.mysticism.client.init;
 
 import com.bsixel.mysticism.MysticismMod;
 import com.bsixel.mysticism.client.gui.overlays.OverlayHandler;
+import com.bsixel.mysticism.client.init.registries.MysticismRenderingRegistry;
+import com.bsixel.mysticism.client.init.registries.ParticleRegistry;
 import com.bsixel.mysticism.client.keybindings.KeyHandler;
 import com.bsixel.mysticism.client.keybindings.Keybindings;
+import com.bsixel.mysticism.common.init.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -21,6 +24,7 @@ public class ClientProxy extends CommonProxy { // TODO: Register textures etc
     public void init(IEventBus lifecycleBus, IEventBus ingameBus) {
         logger.info("Initializing clientside for Mysticism");
         super.init(lifecycleBus, ingameBus); // Register shared-side things
+
         // Register clientside-only things: textures, rendering, GUIs etc
         this.attachStartupLifecycleBus(lifecycleBus);
         this.attachNormalEventBus(ingameBus);
@@ -34,6 +38,8 @@ public class ClientProxy extends CommonProxy { // TODO: Register textures etc
     private void attachStartupLifecycleBus(IEventBus lifecycleBus) {
         // onServerStart/stop watchers etc
         lifecycleBus.addListener(this::registerKeybindings);
+        lifecycleBus.addListener(MysticismRenderingRegistry::init);
+        lifecycleBus.addListener(ParticleRegistry::init);
     }
 
     private void attachNormalEventBus(IEventBus eventBus) {

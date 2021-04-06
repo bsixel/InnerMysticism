@@ -29,17 +29,17 @@ public class SpellCastTypeTouch extends BaseSpellComponent implements ISpellCast
     }
 
     @Override
-    public boolean cast(LivingEntity caster, SpellInstance spellInstance, SpellComponentInstance wrapper) { // TODO: We'll need to do something different here if they're going AOE touch
-        RayTraceResult traceResult = caster.pick(this.calculateRange(caster), 0, this.canTouchFluids());
+    public boolean cast(SpellInstance spellInstance, SpellComponentInstance wrapper) { // TODO: We'll need to do something different here if they're going AOE touch
+        RayTraceResult traceResult = spellInstance.getCaster().pick(this.calculateRange(spellInstance.getCaster()), 0, this.canTouchFluids());
         return wrapper.getWrappedChildActionComponents().stream().allMatch(child -> {
             ISpellAction childAction = (ISpellAction) child.getComponent();
             // TODO: Add another statement for touch-affecting enhancements - range fluid touching etc
             if (traceResult.getType() == RayTraceResult.Type.BLOCK) {
                 BlockRayTraceResult correctedResult = (BlockRayTraceResult) traceResult; // I think this is actually safe?
-                return childAction.applyToBlock(caster.getEntityWorld(), correctedResult, spellInstance, child); // TODO: Clean
+                return childAction.applyToBlock(spellInstance.getCaster().getEntityWorld(), correctedResult, spellInstance, child); // TODO: Clean
             } else if (traceResult.getType() == RayTraceResult.Type.ENTITY) {
                 EntityRayTraceResult correctedResult = (EntityRayTraceResult) traceResult;
-                return childAction.applyToEntity(caster.getEntityWorld(), correctedResult, spellInstance, child);
+                return childAction.applyToEntity(spellInstance.getCaster().getEntityWorld(), correctedResult, spellInstance, child);
             }
             return false;
         });

@@ -1,7 +1,7 @@
 package com.bsixel.mysticism.common.world;
 
 import com.bsixel.mysticism.MysticismMod;
-import com.bsixel.mysticism.init.registries.BlockRegistry;
+import com.bsixel.mysticism.common.init.registries.BlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;

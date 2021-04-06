@@ -10,7 +10,7 @@ import net.minecraft.util.math.vector.Vector3d;
 public interface ISpellCastType extends ISpellComponent { // Self, sustained (children: beam, chain, self sus), projectile, touch, rune etc. TODO: Will need subclasses
 
     boolean canTouchFluids();
-    boolean cast(LivingEntity caster, SpellInstance spellInstance, SpellComponentInstance wrapper);
+    boolean cast(SpellInstance spellInstance, SpellComponentInstance wrapper);
     boolean cast(BlockPos sourcePos, Vector3d lookVector, SpellInstance spellInstance, SpellComponentInstance wrapper);
 
 }

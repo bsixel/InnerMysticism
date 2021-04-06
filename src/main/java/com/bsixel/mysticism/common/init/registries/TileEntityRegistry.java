@@ -1,4 +1,4 @@
-package com.bsixel.mysticism.init.registries;
+package com.bsixel.mysticism.common.init.registries;
 
 import com.bsixel.mysticism.MysticismMod;
 import net.minecraft.tileentity.TileEntityType;

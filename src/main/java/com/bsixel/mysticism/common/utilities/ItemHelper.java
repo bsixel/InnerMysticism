@@ -1,7 +1,6 @@
 package com.bsixel.mysticism.common.utilities;
 
-import com.bsixel.mysticism.init.registries.ItemRegistry;
-import net.minecraft.block.Block;
+import com.bsixel.mysticism.common.init.registries.ItemRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
